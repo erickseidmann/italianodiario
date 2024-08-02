@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Transcription Exercise</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .audio-control {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Transcrição de Áudio</h2>
+        <p>Aperte o play na frente de cada frase em italiano e transcreva bi espaço a frente.</p>
+        <div class="row">
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary audio-control" onclick="playAudio('Ti presento la mia famiglia')">Play</button>
+                
+                <input type="text" id="transcription1" class="form-control" placeholder="Transcreva aqui">
+            </div>
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary audio-control" onclick="playAudio('Mi chiamo Marco')">Play</button>
+                
+                <input type="text" id="transcription2" class="form-control" placeholder="Transcreva aqui">
+            </div>
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary audio-control" onclick="playAudio('Siamo sempre uniti e ci aiutiamo a vicenda')">Play</button>
+                
+                <input type="text" id="transcription3" class="form-control" placeholder="Transcreva aqui">
+            </div>
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary audio-control" onclick="playAudio('Mia moglie si chiama Anna ed è un\'insegnante di inglese a scuola')">Play</button>
+                
+                <input type="text" id="transcription4" class="form-control" placeholder="Transcreva aqui">
+            </div>
+        </div>
+        <button id="verifyBtn" class="btn btn-success">Verificar</button>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script>
+        function playAudio(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'it-IT';
+            speechSynthesis.speak(utterance);
+        }
+
+        document.getElementById('verifyBtn').addEventListener('click', () => {
+            const transcriptions = [
+                document.getElementById('transcription1').value.trim(),
+                document.getElementById('transcription2').value.trim(),
+                document.getElementById('transcription3').value.trim(),
+                document.getElementById('transcription4').value.trim()
+            ];
+
+            const answers = [
+                'Ti presento la mia famiglia',
+                'Mi chiamo Marco',
+                'Siamo sempre uniti e ci aiutiamo a vicenda',
+                'Mia moglie si chiama Anna ed è un\'insegnante di inglese a scuola'
+            ];
+
+            let correctCount = 0;
+            let incorrectCount = 0;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            transcriptions.forEach((transcription, index) => {
+                const answer = answers[index];
+                if (transcription.toLowerCase() === answer.toLowerCase()) {
+                    correctCount++;
+                    resultDiv.innerHTML += `<p style="color: green;">${index + 1}. Correto</p>`;
+                } else {
+                    incorrectCount++;
+                    resultDiv.innerHTML += `<p style="color: red;">${index + 1}. Incorreto (Resposta correta: "${answer}")</p>`;
+                }
+            });
+
+            resultDiv.innerHTML += `<p>Corretos: ${correctCount}, Errados: ${incorrectCount}</p>`;
+        });
+    </script>
+</body>
+</html>

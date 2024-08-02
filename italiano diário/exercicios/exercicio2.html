@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Exercise</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .option {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .dropzone {
+            border-bottom: 2px solid #ccc;
+            padding: 5px;
+            min-width: 40px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Scegli tra le opzioni quelle giuste</h2>
+        <p>Escolhe entre as opções aquelas corretas e arraste para o lugar do texto depois pressione o botão Verificar para conferir se está correto.</p>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Opções:</h4>
+                <div id="options" class="d-flex flex-wrap">
+                    <div class="option" draggable="true">sono</div>
+                    <div class="option" draggable="true">è</div>
+                    <div class="option" draggable="true">sono</div>
+                    <div class="option" draggable="true">è</div>
+                    <div class="option" draggable="true">siamo</div>
+                    <div class="option" draggable="true">è</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4>Testo:</h4>
+                <p>Ciao! Ti presento la mia famiglia. Mi chiamo Marco e <span class="dropzone" data-answer="sono"></span> una persona molto impegnata perché lavoro in una piccola azienda di famiglia. Mia moglie si chiama Anna ed <span class="dropzone" data-answer="è"></span> un'insegnante di inglese a scuola. Nostro figlio, Luca, ha 15 anni ed <span class="dropzone" data-answer="è"></span> un grande appassionato di calcio. Nostra figlia, Marta, ha 20 anni ed <span class="dropzone" data-answer="è"></span> una talentuosa musicista che studia al conservatorio. I miei genitori <span class="dropzone" data-answer="sono"></span> delle persone meravigliose e vivono in campagna. <span class="dropzone" data-answer="siamo"></span> sempre uniti e ci aiutiamo a vicenda. Anche tu hai una famiglia così unita e affettuosa?</p>
+                <button id="verifyBtn" class="btn btn-primary">Verificar</button>
+            </div>
+        </div>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const options = document.querySelectorAll('.option');
+            const dropzones = document.querySelectorAll('.dropzone');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const result = document.getElementById('result');
+
+            options.forEach(option => {
+                option.addEventListener('dragstart', dragStart);
+            });
+
+            dropzones.forEach(dropzone => {
+                dropzone.addEventListener('dragover', dragOver);
+                dropzone.addEventListener('drop', drop);
+            });
+
+            function dragStart(e) {
+                e.dataTransfer.setData('text', e.target.textContent);
+            }
+
+            function dragOver(e) {
+                e.preventDefault();
+            }
+
+            function drop(e) {
+                e.preventDefault();
+                const data = e.dataTransfer.getData('text');
+                e.target.textContent = data;
+                e.target.classList.remove('empty');
+            }
+
+            verifyBtn.addEventListener('click', () => {
+                let correctCount = 0;
+                let incorrectCount = 0;
+                dropzones.forEach(dropzone => {
+                    if (dropzone.textContent.trim() === dropzone.getAttribute('data-answer')) {
+                        dropzone.classList.add('correct');
+                        dropzone.classList.remove('incorrect');
+                        correctCount++;
+                    } else {
+                        dropzone.classList.add('incorrect');
+                        dropzone.classList.remove('correct');
+                        incorrectCount++;
+                    }
+                });
+                result.innerHTML = `<p>Corretos: ${correctCount}, Errados: ${incorrectCount}</p>`;
+                result.classList.add('mt-3');
+            });
+        });
+    </script>
+</body>
+</html>

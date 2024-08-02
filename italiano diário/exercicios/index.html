@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esercizio di Plurale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .exercise-item {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: calc(100% - 50px);
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        input.correct {
+            border: 2px solid green;
+            background-color: #e6ffe6;
+        }
+        input.incorrect {
+            border: 2px solid red;
+            background-color: #ffe6e6;
+        }
+        .feedback {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+        }
+        .feedback.correct::after {
+            content: '✔';
+            color: green;
+        }
+        .feedback.incorrect::after {
+            content: '✖';
+            color: red;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #score {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trasforma questi sostantivi al plurale</h1>
+        <div id="score">Corrette: 0 | Errate: 0</div>
+        <form id="exerciseForm">
+            <div class="exercise-item">
+                <label for="word1">1. Casa</label>
+                <input type="text" id="word1"><span class="feedback" id="feedback1"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word2">2. Muro</label>
+                <input type="text" id="word2"><span class="feedback" id="feedback2"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word3">3. Festa</label>
+                <input type="text" id="word3"><span class="feedback" id="feedback3"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word4">4. Quaderno</label>
+                <input type="text" id="word4"><span class="feedback" id="feedback4"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word5">5. Vita</label>
+                <input type="text" id="word5"><span class="feedback" id="feedback5"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word6">6. Paese</label>
+                <input type="text" id="word6"><span class="feedback" id="feedback6"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word7">7. Mondo</label>
+                <input type="text" id="word7"><span class="feedback" id="feedback7"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word8">8. Signora</label>
+                <input type="text" id="word8"><span class="feedback" id="feedback8"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word9">9. Passaporto</label>
+                <input type="text" id="word9"><span class="feedback" id="feedback9"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word10">10. Giorno</label>
+                <input type="text" id="word10"><span class="feedback" id="feedback10"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word11">11. Mattina</label>
+                <input type="text" id="word11"><span class="feedback" id="feedback11"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word12">12. Sera</label>
+                <input type="text" id="word12"><span class="feedback" id="feedback12"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word13">13. Amico</label>
+                <input type="text" id="word13"><span class="feedback" id="feedback13"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word14">14. Amore</label>
+                <input type="text" id="word14"><span class="feedback" id="feedback14"></span>
+            </div>
+            <div class="exercise-item">
+                <label for="word15">15. Persona</label>
+                <input type="text" id="word15"><span class="feedback" id="feedback15"></span>
+            </div>
+            <button type="button" onclick="checkAnswers()">Verifica</button>
+        </form>
+    </div>
+    <script >
+        function getPlural(word) {
+    // Basic Italian pluralization rules
+    if (word.endsWith('a')) {
+        return word.slice(0, -1) + 'e';
+    } else if (word.endsWith('o')) {
+        return word.slice(0, -1) + 'i';
+    } else if (word.endsWith('e')) {
+        return word.slice(0, -1) + 'i';
+    } else if (word.endsWith('io')) {
+        return word.slice(0, -2) + 'i';
+    } else {
+        return word; // Default case, might need more complex handling for exceptions
+    }
+}
+
+function checkAnswers() {
+    const words = [
+        'Casa', 'Muro', 'Festa', 'Quaderno', 'Vita', 
+        'Paese', 'Mondo', 'Signora', 'Passaporto', 'Giorno',
+        'Mattina', 'Sera', 'Amico', 'Amore', 'Persona'
+    ];
+
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    words.forEach((word, index) => {
+        const inputId = 'word' + (index + 1);
+        const feedbackId = 'feedback' + (index + 1);
+        const userAnswer = document.getElementById(inputId).value.trim().toLowerCase();
+        const correctAnswer = getPlural(word.toLowerCase());
+
+        if (userAnswer === correctAnswer) {
+            document.getElementById(inputId).classList.add('correct');
+            document.getElementById(inputId).classList.remove('incorrect');
+            document.getElementById(feedbackId).classList.add('correct');
+            document.getElementById(feedbackId).classList.remove('incorrect');
+            document.getElementById(feedbackId).textContent = 'Parabéns';
+            correctCount++;
+        } else {
+            document.getElementById(inputId).classList.add('incorrect');
+            document.getElementById(inputId).classList.remove('correct');
+            document.getElementById(feedbackId).classList.add('incorrect');
+            document.getElementById(feedbackId).classList.remove('correct');
+            document.getElementById(feedbackId).textContent = `✖ ${correctAnswer}`;
+            incorrectCount++;
+        }
+    });
+
+    document.getElementById('score').textContent = `Corrette: ${correctCount} | Errate: ${incorrectCount}`;
+}
+
+    </script>
+</body>
+</html>
