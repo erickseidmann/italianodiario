@@ -1,7 +1,7 @@
 {
   "settings": {
     "name": "Italiano Diario",
-    "currentPage": "index.html",
+    "currentPage": "page5.html",
     "ai": {
       "imageSearchQuery": "Italian culture"
     },
@@ -1083,12 +1083,12 @@
           "_cid": "uiOJAvc1Lb",
           "_anchor": "hero-17-uiOJAvc1Lb",
           "alias": false,
-          "_PHPplaceholders": [],
-          "_JSplaceholders": [],
           "_protectedParams": [],
           "_global": false,
           "_once": false,
-          "_params": {}
+          "_params": {},
+          "_PHPplaceholders": [],
+          "_JSplaceholders": []
         },
         {
           "_styles": {
