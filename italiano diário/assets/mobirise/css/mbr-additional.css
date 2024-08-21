@@ -1808,8 +1808,8 @@ a {
   color: #ffffff;
 }
 .cid-uiOJAvsLqk {
-  padding-top: 3rem;
-  padding-bottom: 2rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
   background-color: #04394e;
 }
 .cid-uiOJAvsLqk .social-row {
@@ -5984,6 +5984,109 @@ a {
 }
 .cid-uj14ee6JQx .mbr-text {
   color: #04394e;
+  text-align: left;
+}
+.cid-ulm1MbE4hU {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  background-color: #c1121f;
+}
+.cid-ulm1MbE4hU .mbr-iconfont {
+  font-size: 1.2rem !important;
+  font-family: 'Moririse2' !important;
+  color: white;
+  transition: all 0.3s;
+  transform: rotate(180deg);
+  padding-left: 0.5rem;
+}
+.cid-ulm1MbE4hU .panel-group {
+  border: none;
+}
+.cid-ulm1MbE4hU .card-header {
+  padding: 0rem;
+}
+@media (max-width: 767px) {
+  .cid-ulm1MbE4hU .card-header {
+    padding: 0rem;
+  }
+}
+.cid-ulm1MbE4hU .panel-body {
+  padding: 0rem;
+  padding-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+.cid-ulm1MbE4hU .img-col {
+  padding: 0;
+}
+.cid-ulm1MbE4hU .img-item {
+  height: 100%;
+}
+.cid-ulm1MbE4hU img {
+  height: 100%;
+  object-fit: cover;
+}
+.cid-ulm1MbE4hU .collapsed span {
+  transform: rotate(0deg);
+}
+.cid-ulm1MbE4hU .panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cid-ulm1MbE4hU p {
+  margin-bottom: 0.3rem;
+}
+.cid-ulm1MbE4hU .panel-title-edit {
+  color: #000000;
+}
+.cid-ulm1MbE4hU .card .card-header {
+  background-color: transparent;
+  margin-bottom: 0;
+  border: 0;
+  border-radius: 2rem;
+}
+.cid-ulm1MbE4hU .card {
+  background: #ffffff;
+  padding: 2.25rem;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 767px) {
+  .cid-ulm1MbE4hU .card {
+    padding: 2rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+@media (min-width: 992px) and (max-width: 1200px) {
+  .cid-ulm1MbE4hU .card {
+    margin-bottom: 1rem;
+    padding: 2rem 1.5rem;
+  }
+}
+.cid-ulm1MbE4hU .panel-text {
+  color: #000000;
+}
+.cid-ulm1MbE4hU .mbr-section-title {
+  text-align: center;
+  color: #ffffff;
+}
+.cid-ulm1MbE4hU .mbr-section-subtitle {
+  color: #000000;
+  text-align: center;
+}
+.cid-ulm1MbE4hU .panel-title-edit,
+.cid-ulm1MbE4hU .mbr-iconfont {
+  color: #000000;
+}
+.cid-ulm1MbE4hU .exercise-item {
+  margin-bottom: 15px;
+  position: relative;
+}
+.cid-ulm1MbE4hU label {
+  display: block;
+  margin-bottom: 5px;
+}
+.cid-ulm1MbE4hU H1 {
   text-align: left;
 }
 .cid-uj14Oh3hAs {

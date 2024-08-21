@@ -8,20 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="shortcut icon" href="assets/images/ita-206x116.png" type="image/x-icon">
   <meta name="description" content="">
-  <style>
-    .password-toggle {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
-    
-    .password-toggle i {
-        font-size: 1.2em;
-        color: #888;
-    }
-    </style>
+  
   
   <title>Cadastro</title>
   <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
@@ -31,12 +18,13 @@
   <link rel="stylesheet" href="assets/dropdown/css/style.css">
   <link rel="stylesheet" href="assets/socicon/css/styles.css">
   <link rel="stylesheet" href="assets/theme/css/style.css">
+  <link rel="stylesheet" href="assets/recaptcha.css">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;700&display=swap&display=swap"></noscript>
-  <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=RFKxCp"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=RFKxCp" type="text/css">
+  <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=RiVtgv"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=RiVtgv" type="text/css">
 
   
-
+  
   
 </head>
 <body>
@@ -109,7 +97,7 @@
                     
                 </div>
                 <div class="col-lg-12 mx-auto mbr-form" data-form-type="formoid">
-                    <form action="https://mobirise.eu/" method="POST" class="mbr-form form-with-styler" data-form-title="Form Name"><input type="hidden" name="email" data-form-email="true" value="SSKW6YBthCgWPlmQbbg316JDcJIKO7vTM7TJbkiJMcbpbTsM5fGoqIIrxh9Lo6IEO+U9HerxIqsESnwYGktl5losQJkg/CKgYGFPwVrmZ3KKxtYXYkKb4LCwBYg0IShB.wQ3E20l1cTAOTSYzh52KaA0icYITRWqajAjCBZpiXVl96QXfr3d8dtLogbVJxb1IMP3Dc1aXpRAV0/GwZM/NXkpdEHghKqNomyHx66mCSl9sf55UXF3RxPhcrCiCepx0">
+                    <form action="https://mobirise.eu/" method="POST" class="mbr-form form-with-styler" data-form-title="Form Name"><input type="hidden" name="email" data-form-email="true" value="tswuWdZDyugmjZpzn2itvcc5Wqi+N0VdSBI3VDVguZqvWmp9CvSBoUdyrybxGw/g5f4bY+AiJObBIxE7bWScpWbUYBphY2zcwtB4RK8fGTex2cxC8EV8l9tzg0cBZwbv.n8yVCv2EaTajq+jmYvkHFjK2+YkZVrMnd1piuh0cE3Q+AbnGqAi5rwYpjbakkkQA7yxm2lDHbYcx45xEyXrRbnf3vJtriExgWIdMwYdLdpCg/nf7TWgEyi/tMnB+oRQX">
                         <div class="row">
                             <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling out the form!</div>
                             <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
@@ -123,14 +111,11 @@
                             <div class="col-md col-sm-12 form-group mb-3 mb-3" data-for="email">
                                 <input type="email" name="email" placeholder="E-mail" data-form-field="email" class="form-control" value="" id="email-form03-1q">
                             </div>
-                            <div class="col-12 form-group mb-3 mb-3 position-relative" data-for="senha">
-                                <input type="password" name="password" placeholder="Senha" data-form-field="password" class="form-control" value="" id="password-form03-1q">
-                                <span class="password-toggle" onclick="togglePassword()">
-                                    <i class="fas fa-eye" id="toggle-icon"></i>
-                                </span>
-                            </div>
                             <div class="col-12 form-group mb-3 mb-3" data-for="phone">
-                                <input type="tel" name="phone" placeholder="Celular" data-form-field="phone" class="form-control" value="" id="phone-form03-1q">
+                                <input type="tel" name="phone" placeholder="Senha" data-form-field="phone" class="form-control" value="" id="phone-form03-1q">
+                            </div>
+                            <div class="col-12 form-group mb-3 mb-3" data-for="textarea">
+                                <textarea name="textarea" placeholder="Celular" data-form-field="textarea" class="form-control" id="textarea-form03-1q"></textarea>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 align-center mbr-section-btn"><button type="submit" class="btn btn-primary display-7">
                                     Cadastrar</button></div>
@@ -189,23 +174,9 @@
   <script src="assets/dropdown/js/navbar-dropdown.js"></script>
   <script src="assets/vimeoplayer/player.js"></script>
   <script src="assets/theme/js/script.js"></script>
-  <script src="assets/formoid/formoid.min.js"></script>
+  <script src="assets/formoid.min.js"></script>
   
   
-  <script>
-    function togglePassword() {
-        var passwordField = document.getElementById("password-form03-1q");
-        var toggleIcon = document.getElementById("toggle-icon");
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            toggleIcon.classList.remove("fa-eye");
-            toggleIcon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
-            toggleIcon.classList.remove("fa-eye-slash");
-            toggleIcon.classList.add("fa-eye");
-        }
-    }
-    </script>  
+  
 </body>
 </html>
