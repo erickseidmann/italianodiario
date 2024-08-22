@@ -1,6 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-echo "O formulário foi enviado."; // Adicione esta linha para verificar
 
 // Inclua o arquivo de configuração
 require 'config.php';
