@@ -44,7 +44,18 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;700&display=swap&display=swap"></noscript>
   <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=RFKxCp"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=RFKxCp" type="text/css">
 
-  
+  <script>
+    // Verifica se há um erro na URL e exibe um pop-up
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error')) {
+            const error = urlParams.get('error');
+            if (error === 'email_exists') {
+                alert('Esse email já está cadastrado.');
+            }
+        }
+    }
+</script>
 
   
 </head>
@@ -142,6 +153,9 @@
                             <button type="submit" class="btn btn-primary display-7">Cadastrar</button>
                           </div>
                         </div>
+
+                        <input type="hidden" name="status" value="Ativo">
+
                       </form>
                     
         

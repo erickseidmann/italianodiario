@@ -3,7 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
 // Inclua o arquivo de configuração
 require 'config.php';
 
@@ -14,19 +13,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $phone = $_POST['phone'];
-    
-    // Prepara a consulta para inserir os dados no banco de dados
-    $stmt = $conn->prepare("INSERT INTO usuarios (name, email, password, phone) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $name, $email, $password, $phone);
+    $status = isset($_POST['status']) ? $_POST['status'] : 'Ativo'; // Define 'Ativo' como padrão
 
-    // Executa a consulta
-    if ($stmt->execute()) {
-        // Redireciona para a página de sucesso
-        header("Location: sucesso.html");
+    // Verificar se o e-mail já existe
+    $sql = "SELECT * FROM usuarios WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Se o e-mail já existe, redirecionar de volta ao formulário com uma mensagem de erro
+        header("Location: page2.html?error=email_exists");
         exit();
     } else {
-        // Exibe mensagem de erro para depuração
-        echo "Erro: " . $stmt->error;
+        // Se o e-mail não existe, proceder com a inserção
+        $sql = "INSERT INTO usuarios (name, email, password, phone, status) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssss", $name, $email, $password, $phone, $status);
+
+        if ($stmt->execute()) {
+            // Redirecionar para uma página de sucesso
+            header("Location: sucesso.html");
+            exit();
+        } else {
+            echo "Erro: " . $stmt->error;
+        }
     }
     
     // Fecha a declaração e a conexão
