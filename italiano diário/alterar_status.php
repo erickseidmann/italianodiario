@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         // Redirecionar de volta para a lista de alunos
-        header("Location: exibir_alunos.php");
+        header("Location: page10.php");
         exit();
     } else {
         echo "Erro ao atualizar o status: " . $conn->error;
