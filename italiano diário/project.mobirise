@@ -1,7 +1,7 @@
 {
   "settings": {
     "name": "Italiano Diario",
-    "currentPage": "page10.html",
+    "currentPage": "page4.html",
     "ai": {
       "imageSearchQuery": "Italian culture"
     },
@@ -265,7 +265,7 @@
     "imageResize": true,
     "screenshot": "screenshot.png",
     "publishType": "local",
-    "publishPath": "file:///D:/Users/Erick%20Seidmann/Desktop/it3"
+    "publishPath": "file:///D:/Users/Erick%20Seidmann/Desktop/it4"
   },
   "pages": {
     "index.html": {

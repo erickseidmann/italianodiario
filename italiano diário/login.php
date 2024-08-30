@@ -12,12 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
-    // Sanitiza as entradas para evitar SQL Injection
-    $email = $conn->real_escape_string($email);
-
-    // Consulta no banco de dados para encontrar o usuário pelo email
-    $sql = "SELECT * FROM usuarios WHERE email = '$email'";
-    $result = $conn->query($sql);
+    // Prepara a declaração SQL para evitar SQL Injection
+    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -28,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             session_start();
             $_SESSION['loggedin'] = true;
             $_SESSION['email'] = $email;
+            $_SESSION['name'] = $row['name']; // Armazena o nome do usuário na sessão
             header("Location: page4.php");
             exit;
         } else {
@@ -38,6 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // E-mail não encontrado
         echo "E-mail ou senha incorretos.";
     }
+
+    // Fecha a declaração preparada
+    $stmt->close();
 }
 
 // Fecha a conexão
