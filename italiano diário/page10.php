@@ -48,6 +48,11 @@ $result = $conn->query($sql);
         .search-bar {
             margin-bottom: 20px; /* Espaçamento abaixo da barra de pesquisa */
         }
+        label {
+            font-size: 25px;
+            font-weight: bold; /* Negrito */
+            color: white; /* Texto branco para os labels */
+        }
     </style>
   
   
@@ -235,7 +240,193 @@ $result = $conn->query($sql);
                             </div>
                         </div>
                     </div>
-                   
+                    <div class="card" mbr-if="cardAmount > 2">
+                        <div class="card-header" role="tab" id="headingThree">
+                            <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core href="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                                <h4 class="panel-title-edit mbr-fonts-style" mbr-theme-style="display-7" data-app-selector=".panel-title-edit">Editar&nbsp; Blog</h4>
+                                <span class="sign mbr-iconfont mobi-mbri-plus mobi-mbri"></span>
+                            </a>
+                        </div>
+                        <div id="collapse3" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion" data-bs-parent="#accordion">
+                            <div class="panel-body">
+                            <div class="container mt-5">
+                                
+                                <form action="submitBlog.php" method="POST" enctype="multipart/form-data">
+                                    <!-- Título 1 -->
+                                    <div class="form-group">
+                                        <label for="titulo1">Título 1 (máximo 32 caracteres):</label>
+                                        <input type="text" class="form-control" id="titulo1" name="titulo1" maxlength="32" required>
+                                    </div>
+
+                                    <!-- Texto 1 -->
+                                    <div class="form-group">
+                                        <label for="texto1">Texto 1 (máximo 430 caracteres):</label>
+                                        <textarea class="form-control" id="texto1" name="texto1" maxlength="430" rows="3" required></textarea>
+                                    </div>
+
+                                    <!-- Link do vídeo do YouTube -->
+                                    <div class="form-group">
+                                        <label for="linkVideo">Link do vídeo do YouTube:</label>
+                                        <input type="url" class="form-control" id="linkVideo" name="linkVideo" required>
+                                    </div>
+
+                                    <!-- Título 2 -->
+                                    <div class="form-group">
+                                        <label for="titulo2">Título 2 (máximo 15 caracteres):</label>
+                                        <input type="text" class="form-control" id="titulo2" name="titulo2" maxlength="15" required>
+                                    </div>
+
+                                    <!-- Texto 2 Parágrafo 1 -->
+                                    <div class="form-group">
+                                        <label for="texto2p1">Texto 2 Parágrafo 1 (máximo 150 caracteres):</label>
+                                        <textarea class="form-control" id="texto2p1" name="texto2p1" maxlength="150" rows="2" required></textarea>
+                                    </div>
+
+                                    <!-- Texto 2 Parágrafo 2 -->
+                                    <div class="form-group">
+                                        <label for="texto2p2">Texto 2 Parágrafo 2 (máximo 150 caracteres):</label>
+                                        <textarea class="form-control" id="texto2p2" name="texto2p2" maxlength="150" rows="2" required></textarea>
+                                    </div>
+
+                                    <!-- Texto 2 Parágrafo 3 -->
+                                    <div class="form-group">
+                                        <label for="texto2p3">Texto 2 Parágrafo 3 (máximo 150 caracteres):</label>
+                                        <textarea class="form-control" id="texto2p3" name="texto2p3" maxlength="150" rows="2" required></textarea>
+                                    </div>
+
+                                    <!-- Adicionar imagem -->
+                                    <div class="form-group">
+                                        <label for="imagem">Adicionar imagem:</label>
+                                        <input type="file" class="form-control-file" id="imagem" name="imagem" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Título Comentários -->
+                                    <div class="form-group">
+                                        <label for="tituloComentarios">Título Comentários (máximo 150 caracteres):</label>
+                                        <textarea class="form-control" id="tituloComentarios" name="tituloComentarios" maxlength="150" rows="2" required></textarea>
+                                    </div>
+
+                                    <!-- Comentário 1 -->
+                                    <div class="form-group">
+                                        <label for="comentario1">Comentário 1 (máximo 187 caracteres):</label>
+                                        <textarea class="form-control" id="comentario1" name="comentario1" maxlength="187" rows="2" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fotoComentario1">Foto Comentário 1:</label>
+                                        <input type="file" class="form-control-file" id="fotoComentario1" name="fotoComentario1" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Comentário 2 -->
+                                    <div class="form-group">
+                                        <label for="comentario2">Comentário 2 (máximo 187 caracteres):</label>
+                                        <textarea class="form-control" id="comentario2" name="comentario2" maxlength="187" rows="2" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fotoComentario2">Foto Comentário 2:</label>
+                                        <input type="file" class="form-control-file" id="fotoComentario2" name="fotoComentario2" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Comentário 3 -->
+                                    <div class="form-group">
+                                        <label for="comentario3">Comentário 3 (máximo 187 caracteres):</label>
+                                        <textarea class="form-control" id="comentario3" name="comentario3" maxlength="187" rows="2" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fotoComentario3">Foto Comentário 3:</label>
+                                        <input type="file" class="form-control-file" id="fotoComentario3" name="fotoComentario3" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Comentário 4 -->
+                                    <div class="form-group">
+                                        <label for="comentario4">Comentário 4 (máximo 187 caracteres):</label>
+                                        <textarea class="form-control" id="comentario4" name="comentario4" maxlength="187" rows="2" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fotoComentario4">Foto Comentário 4:</label>
+                                        <input type="file" class="form-control-file" id="fotoComentario4" name="fotoComentario4" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Comentário 5 -->
+                                    <div class="form-group">
+                                        <label for="comentario5">Comentário 5 (máximo 187 caracteres):</label>
+                                        <textarea class="form-control" id="comentario5" name="comentario5" maxlength="187" rows="2" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fotoComentario5">Foto Comentário 5:</label>
+                                        <input type="file" class="form-control-file" id="fotoComentario5" name="fotoComentario5" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Comentário 6 -->
+                                    <div class="form-group">
+                                        <label for="comentario6">Comentário 6 (máximo 187 caracteres):</label>
+                                        <textarea class="form-control" id="comentario6" name="comentario6" maxlength="187" rows="2" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fotoComentario6">Foto Comentário 6:</label>
+                                        <input type="file" class="form-control-file" id="fotoComentario6" name="fotoComentario6" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Título Galeria -->
+                                    <div class="form-group">
+                                        <label for="tituloGaleria">Título Galeria (máximo 20 caracteres):</label>
+                                        <input type="text" class="form-control" id="tituloGaleria" name="tituloGaleria" maxlength="20" required>
+                                    </div>
+
+                                    <!-- Sub Título Galeria -->
+                                    <div class="form-group">
+                                        <label for="subTituloGaleria">Sub Título Galeria (máximo 25 caracteres):</label>
+                                        <input type="text" class="form-control" id="subTituloGaleria" name="subTituloGaleria" maxlength="25" required>
+                                    </div>
+
+                                    <!-- Imagem 1 da Galeria -->
+                                    <div class="form-group">
+                                        <label for="imagemGaleria1">Imagem 1 da Galeria:</label>
+                                        <input type="file" class="form-control-file" id="imagemGaleria1" name="imagemGaleria1" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Imagem 2 da Galeria -->
+                                    <div class="form-group">
+                                        <label for="imagemGaleria2">Imagem 2 da Galeria:</label>
+                                        <input type="file" class="form-control-file" id="imagemGaleria2" name="imagemGaleria2" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Imagem 3 da Galeria -->
+                                    <div class="form-group">
+                                        <label for="imagemGaleria3">Imagem 3 da Galeria:</label>
+                                        <input type="file" class="form-control-file" id="imagemGaleria3" name="imagemGaleria3" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Imagem 4 da Galeria -->
+                                    <div class="form-group">
+                                        <label for="imagemGaleria4">Imagem 4 da Galeria:</label>
+                                        <input type="file" class="form-control-file" id="imagemGaleria4" name="imagemGaleria4" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Imagem 5 da Galeria -->
+                                    <div class="form-group">
+                                        <label for="imagemGaleria5">Imagem 5 da Galeria:</label>
+                                        <input type="file" class="form-control-file" id="imagemGaleria5" name="imagemGaleria5" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Imagem 6 da Galeria -->
+                                    <div class="form-group">
+                                        <label for="imagemGaleria6">Imagem 6 da Galeria:</label>
+                                        <input type="file" class="form-control-file" id="imagemGaleria6" name="imagemGaleria6" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Imagem 7 da Galeria -->
+                                    <div class="form-group">
+                                        <label for="imagemGaleria7">Imagem 7 da Galeria:</label>
+                                        <input type="file" class="form-control-file" id="imagemGaleria7" name="imagemGaleria7" accept="image/*" required>
+                                    </div>
+
+                                    <!-- Botão de Enviar -->
+                                    <button type="submit" class="btn btn-primary btn-block" value="Enviar">Enviar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
                     
                     
                 </div>
