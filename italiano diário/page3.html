@@ -11,6 +11,7 @@
   
   
   <title>Login</title>
+
   <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
@@ -22,9 +23,10 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;700&display=swap&display=swap"></noscript>
   <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=ZcUKA9"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=ZcUKA9" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   
-  
+
   
 </head>
 <body>
@@ -104,9 +106,10 @@
                     <div class="col-md col-sm-12 form-group mb-3" data-for="email">
                         <input type="email" name="email" placeholder="E-mail" data-form-field="email" class="form-control" id="email-form02-1l" required>
                     </div>
-                    <div class="col-12 form-group mb-3" data-for="senha">
-                        <input type="password" name="senha" placeholder="Senha" data-form-field="senha" class="form-control" id="senha-form02-1l" required>
-                    </div>
+                    <div class="col-12 form-group mb-3 position-relative" data-for="senha">
+                      <input type="password" name="senha" placeholder="Senha" data-form-field="senha" class="form-control" id="senha-form02-1l" required>
+                      <span toggle="#senha-form02-1l" class="fa fa-fw fa-eye toggle-password" style="position: absolute; top: 50%; right: 50px; cursor: pointer; transform: translateY(-50%);"></span>
+                  </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 align-center mbr-section-btn">
                         <button type="submit" class="btn btn-primary display-7">Login</button>
                     </div>
@@ -150,6 +153,31 @@
     </div>
 </section>
 
+<script>
+  // Verifica se há um parâmetro de erro na URL
+  window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('error')) {
+          alert("E-mail ou senha incorretos.");
+      }
+  }
+
+  // Função para alternar a visibilidade da senha
+  document.querySelectorAll('.toggle-password').forEach(item => {
+      item.addEventListener('click', function () {
+          const input = document.querySelector(this.getAttribute('toggle'));
+          if (input.getAttribute('type') === 'password') {
+              input.setAttribute('type', 'text');
+              this.classList.remove('fa-eye');
+              this.classList.add('fa-eye-slash');
+          } else {
+              input.setAttribute('type', 'password');
+              this.classList.remove('fa-eye-slash');
+              this.classList.add('fa-eye');
+          }
+      });
+  });
+</script>
 
 <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/smoothscroll/smooth-scroll.js"></script>

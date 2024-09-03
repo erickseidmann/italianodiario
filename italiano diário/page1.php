@@ -58,7 +58,7 @@ $conn->close();
   
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="shortcut icon" href="assets/images/ita-206x116.png" type="image/x-icon">
-  <meta name="description" content="Immerse yourself in the Italian language and culture with our influencer who lived and learned in Italy. Discover the joy of learning Italian through real-life experiences.">
+  <meta name="description" content="Italiano Diario">
   
   
   <title>Blog</title>

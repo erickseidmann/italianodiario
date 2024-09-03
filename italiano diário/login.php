@@ -42,11 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             } else {
                 // Senha incorreta
-                echo "E-mail ou senha incorretos.";
+                header("Location: page3.html?error=1");
+                exit;
             }
         } else {
             // E-mail não encontrado
-            echo "E-mail ou senha incorretos.";
+            header("Location: page3.html?error=1");
+            exit;
         }
 
         // Fecha a declaração preparada
