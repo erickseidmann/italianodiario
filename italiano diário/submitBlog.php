@@ -37,28 +37,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $imagemGaleria6 = isset($_FILES['imagemGaleria6']) && $_FILES['imagemGaleria6']['error'] == UPLOAD_ERR_OK ? addslashes(file_get_contents($_FILES['imagemGaleria6']['tmp_name'])) : null;
     $imagemGaleria7 = isset($_FILES['imagemGaleria7']) && $_FILES['imagemGaleria7']['error'] == UPLOAD_ERR_OK ? addslashes(file_get_contents($_FILES['imagemGaleria7']['tmp_name'])) : null;
 
-    // Inserir dados no banco de dados
-    $sql = "INSERT INTO infoBlog (titulo1, texto1, linkVideo, titulo2, texto2p1, texto2p2, texto2p3, imagem, 
-            tituloComentarios, comentario1, fotoComentario1, comentario2, fotoComentario2, comentario3, 
-            fotoComentario3, comentario4, fotoComentario4, comentario5, fotoComentario5, comentario6, 
-            fotoComentario6, tituloGaleria, subTituloGaleria, imagemGaleria1, imagemGaleria2, imagemGaleria3, 
-            imagemGaleria4, imagemGaleria5, imagemGaleria6, imagemGaleria7) 
-            VALUES ('$titulo1', '$texto1', '$linkVideo', '$titulo2', '$texto2p1', '$texto2p2', '$texto2p3', 
-            '$imagem', '$tituloComentarios', '$comentario1', '$fotoComentario1', '$comentario2', '$fotoComentario2', 
-            '$comentario3', '$fotoComentario3', '$comentario4', '$fotoComentario4', '$comentario5', 
-            '$fotoComentario5', '$comentario6', '$fotoComentario6', '$tituloGaleria', '$subTituloGaleria', 
-            '$imagemGaleria1', '$imagemGaleria2', '$imagemGaleria3', '$imagemGaleria4', '$imagemGaleria5', 
-            '$imagemGaleria6', '$imagemGaleria7')";
+    // Usar prepared statements para inserir dados no banco de dados
+    $stmt = $conn->prepare("INSERT INTO infoBlog (titulo1, texto1, linkVideo, titulo2, texto2p1, texto2p2, texto2p3, imagem, 
+                            tituloComentarios, comentario1, fotoComentario1, comentario2, fotoComentario2, comentario3, 
+                            fotoComentario3, comentario4, fotoComentario4, comentario5, fotoComentario5, comentario6, 
+                            fotoComentario6, tituloGaleria, subTituloGaleria, imagemGaleria1, imagemGaleria2, imagemGaleria3, 
+                            imagemGaleria4, imagemGaleria5, imagemGaleria6, imagemGaleria7) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    if ($conn->query($sql) === TRUE) {
+    $stmt->bind_param("ssssssssssssssssssssssssssssss", 
+        $titulo1, $texto1, $linkVideo, $titulo2, $texto2p1, $texto2p2, $texto2p3, $imagem, 
+        $tituloComentarios, $comentario1, $fotoComentario1, $comentario2, $fotoComentario2, $comentario3, 
+        $fotoComentario3, $comentario4, $fotoComentario4, $comentario5, $fotoComentario5, $comentario6, 
+        $fotoComentario6, $tituloGaleria, $subTituloGaleria, $imagemGaleria1, $imagemGaleria2, $imagemGaleria3, 
+        $imagemGaleria4, $imagemGaleria5, $imagemGaleria6, $imagemGaleria7);
+
+    if ($stmt->execute()) {
         echo "<script>
                 alert('Dados enviados com sucesso!');
                 window.location.href = 'page10.php';
               </script>";
     } else {
-        echo "Erro: " . $sql . "<br>" . $conn->error;
+        echo "Erro: " . $stmt->error;
     }
 
+    $stmt->close();
     $conn->close();
 }
 ?>

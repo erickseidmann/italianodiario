@@ -1,7 +1,7 @@
 {
   "settings": {
     "name": "Italiano Diario",
-    "currentPage": "index.html",
+    "currentPage": "page10.html",
     "ai": {
       "imageSearchQuery": "Italian culture"
     },
