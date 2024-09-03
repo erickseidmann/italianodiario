@@ -51,7 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             '$imagemGaleria6', '$imagemGaleria7')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Dados enviados com sucesso!";
+        echo "<script>
+                alert('Dados enviados com sucesso!');
+                window.location.href = 'page10.php';
+              </script>";
     } else {
         echo "Erro: " . $sql . "<br>" . $conn->error;
     }

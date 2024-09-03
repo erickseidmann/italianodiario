@@ -1,3 +1,54 @@
+<?php
+// Conectar ao banco de dados
+require 'config.php';
+
+// Buscar o último título, texto e link do vídeo da tabela infoBlog
+$sql = "SELECT titulo1, texto1, linkVideo, imagem, titulo2, texto2p1, texto2p2, texto2p3, tituloComentarios, comentario1,fotocomentario1, comentario2, fotocomentario2, comentario3, fotocomentario3, comentario4, fotocomentario4, comentario5, fotocomentario5, comentario6, fotocomentario6, tituloGaleria, subTituloGaleria  FROM infoBlog ORDER BY id DESC LIMIT 1";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Recuperar o último título, texto e link do vídeo
+    $row = $result->fetch_assoc();
+    $titulo = $row['titulo1'];
+    $texto = $row['texto1'];
+    $linkVideo = $row['linkVideo'];
+    $imagem = $row['imagem'];
+    $titulo2 = $row['titulo2'];
+    $texto2p1 = $row['texto2p1'];
+    $texto2p2 = $row['texto2p2'];
+    $texto2p3 = $row['texto2p3'];
+    $tituloComentarios = $row['tituloComentarios'];
+    $comentario1 = $row['comentario1'];
+    $comentario2 = $row['comentario2'];
+    $comentario3 = $row['comentario3'];
+    $comentario4 = $row['comentario4'];
+    $comentario5 = $row['comentario5'];
+    $comentario6 = $row['comentario6'];
+    $tituloGaleria = $row['tituloGaleria'];
+    $subTituloGaleria = $row['subTituloGaleria'];
+
+} else {
+    $titulo = "Nenhum título encontrado";
+    $texto = "Nenhum texto encontrado";
+    $linkVideo = "https://www.youtube.com/embed/default"; // Link padrão caso não haja vídeo
+    $imagem = "assets/images/default-image.jpg"; // Imagem padrão caso não haja imagem
+    $titulo2 = "Título não encontrado";
+    $texto2p1 = "Texto 1 não encontrado";
+    $texto2p2 = "Texto 2 não encontrado";
+    $texto2p3 = "Texto 3 não encontrado";
+    $tituloComentarios = "titulo  não encontrado";
+    $comentario1 = "Comentario  não encontrado";
+    $comentario2 = "Comentario  não encontrado";
+    $comentario3 = "Comentario  não encontrado";
+    $comentario4 = "Comentario  não encontrado";
+    $comentario5 = "Comentario  não encontrado";
+    $comentario6 = "Comentario  não encontrado";
+    $tituloGaleria = "Não encontrado";
+    $subTituloGaleria = "Não encontrado";
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html  >
 <head>
@@ -56,7 +107,7 @@
 						<a class="nav-link link text-black text-primary display-4" href="index.html">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="page1.html" aria-expanded="false">Blog</a>
+						<a class="nav-link link text-black text-primary display-4" href="page1.php" aria-expanded="false">Blog</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link link text-black text-primary display-4" href="page2.html">Cadastrar</a>
@@ -90,13 +141,14 @@
 		<div class="row justify-content-center">
 			<div class="col-12 col-md">
 				<div class="text-wrapper">
-					<h2 class="mbr-section-title mb-4 mbr-fonts-style display-2"><strong>Que tal umas dicas de Italiano?</strong></h2>
+					<h2 class="mbr-section-title mb-4 mbr-fonts-style display-2"><strong><strong><?php echo htmlspecialchars($titulo); ?></strong></strong></h2>
 				<p class="mbr-text mb-4 mbr-fonts-style display-7">
-						Aprender um novo idioma é uma jornada empolgante. Seguir dicas úteis, como começar pelo básico, assistir filmes em italiano para praticar a pronúncia e conversar regularmente com falantes nativos, faz toda a diferença. Aplicativos de idiomas e o estudo da gramática também são fundamentais para progredir. Com dedicação e prática constante, descobrimos não apenas um novo idioma, mas também uma nova forma de ver o mundo.
+                <?php echo htmlspecialchars($texto); ?>
 				</p>
 				</div>
 			</div>
-			<div class="mbr-figure col-12 col-md-8"><iframe class="mbr-embedded-video" src="https://www.youtube.com/embed/-YBDyri6VVU?loop=1&amp;autoplay=1" width="1280" height="720" frameborder="0" allowfullscreen></iframe></div>
+			<div class="mbr-figure col-12 col-md-8"><iframe class="mbr-embedded-video" src="<?php echo htmlspecialchars($linkVideo); ?>?loop=1&amp;autoplay=1" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
+            </div></div>
 		</div>
        
 	</div>
@@ -113,12 +165,12 @@
 			</div>
 			<div class="col-12 col-md-12 col-lg">
 				<div class="text-wrapper align-left">
-				<h1 class="mbr-section-title mbr-fonts-style mb-4 display-2"><strong>Quem eu sou</strong></h1>
-				<p class="mbr-text align-left mbr-fonts-style mb-3 display-7">OI! Sou Emanuela, a professora de italiano que passou anos na Itália para aprender o idioma na sua forma mais autêntica.</p>
+				<h1 class="mbr-section-title mbr-fonts-style mb-4 display-2"><strong><?php echo htmlspecialchars($titulo2); ?></strong></h1>
+				<p class="mbr-text align-left mbr-fonts-style mb-3 display-7"><?php echo htmlspecialchars($texto2p1); ?></p>
 
-				<p class="mbr-text align-left mbr-fonts-style mb-3 display-7">Venha descobrir os segredos da língua italiana através das minhas experiências únicas.</p>
+				<p class="mbr-text align-left mbr-fonts-style mb-3 display-7"><?php echo htmlspecialchars($texto2p2); ?></p>
 
-				<p class="mbr-text align-left mbr-fonts-style mb-3 display-7">Prepare-se para uma viagem linguística que o levará diretamente às ruas de Roma e aos corações dos italianos.</p>		
+				<p class="mbr-text align-left mbr-fonts-style mb-3 display-7"><?php echo htmlspecialchars($texto2p3); ?></p>		
 				</div>
 			</div>
 		</div>
@@ -132,7 +184,7 @@
 		<div class="row mb-5 justify-content-center">
 			<div class="col-12 mb-0 content-head">
 				<h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-				<strong>Quem já Aprendeu?</strong></h3>	
+				<strong><?php echo htmlspecialchars($tituloComentarios); ?></strong></h3>	
 			</div>
 		</div>
 		<div class="row mbr-masonry" data-masonry="{&quot;percentPosition&quot;: true }">
@@ -140,14 +192,13 @@
 				<div class="item-wrapper">
 					<div class="card-box align-left">
 					<p class="card-text mbr-fonts-style display-7">
-							I can't express how much I adore the unique clothing pieces from this small creative
-							business. Each piece has its own character and charm. I feel like I'm wearing a work of art!
+                    <?php echo htmlspecialchars($comentario1); ?>
 						</p>
 						<div class="img-wrapper mt-4 mb-2">
 						<img src="assets/images/img-3594-1-160x160.jpg" alt="" data-slide-to="0" data-bs-slide-to="0">
 						</div>
 						<h5 class="card-title mbr-fonts-style display-7">
-						<strong>Nome</strong>
+						
 						</h5>
 					</div>
 				</div>
@@ -156,29 +207,25 @@
 				<div class="item-wrapper">
 					<div class="card-box align-left">
 						<!-- editavel --><p class="card-text mbr-fonts-style display-7">
-							I've been a customer for years, and I'm always excited to see the latest creations. The
-							designs are fresh and exciting, and the customer service is top-notch.
+						<?php echo htmlspecialchars($comentario2); ?>
 						</p>
 						<div class="img-wrapper mt-4 mb-2">
 						<!-- editavel -->	<img src="assets/images/img-1698-original-160x213.jpg" data-slide-to="1" data-bs-slide-to="1" alt="">
 						</div>
 						<h5 class="card-title mbr-fonts-style display-7">
-						<!-- editavel -->	<strong>Nome</strong></h5>
+						
 					</div>
 				</div>
 			</div>
 			<div class="item features-without-image col-12 col-md-6 col-lg-4">
 				<div class="item-wrapper">
 					<div class="card-box align-left">
-					<!-- editavel -->	<p class="card-text mbr-fonts-style display-7">
-							I keep coming back for more because I can't find clothing like this anywhere else. It's not
-							just clothing; it's a statement. I'm proud to support such a talented small business.
-						</p>
+					<?php echo htmlspecialchars($comentario3); ?>
 						<div class="img-wrapper mt-4 mb-2">
 					<!-- editavel -->		<img src="assets/images/img-3594-1-160x160.jpg" data-slide-to="2" data-bs-slide-to="2" alt="">
 						</div>
 						<h5 class="card-title mbr-fonts-style display-7">
-						<!-- editavel -->	<strong>Nome</strong>
+						
 						</h5>
 					</div>
 				</div>
@@ -187,14 +234,13 @@
 				<div class="item-wrapper">
 					<div class="card-box align-left">
 						<!-- editavel --><p class="card-text mbr-fonts-style display-7">
-							As a fashion enthusiast, I appreciate the craftsmanship in every piece. These clothes are
-							comfortable, stylish, and perfect for any occasion. I'm hooked!
+						<?php echo htmlspecialchars($comentario4); ?>
 						</p>
 						<div class="img-wrapper mt-4 mb-2">
 						<!-- editavel -->	<img src="assets/images/img-3594-1-160x160.jpg" data-slide-to="3" data-bs-slide-to="3" alt="">
 						</div>
 						<h5 class="card-title mbr-fonts-style display-7">
-						<!-- editavel -->	<strong>Nome</strong>
+						
 						</h5>
 					</div>
 				</div>
@@ -203,13 +249,13 @@
 				<div class="item-wrapper">
 					<div class="card-box align-left">
 						<!-- editavel --><p class="card-text mbr-fonts-style display-7">
-							The quality and attention to detail are truly impressive. Thank you for making me feel stylish!
+                        <?php echo htmlspecialchars($comentario5); ?>
 						</p>
 						<div class="img-wrapper mt-4 mb-2">
 						<!-- editavel -->	<img src="assets/images/img-3909-2-original-160x213.jpg" data-slide-to="4" data-bs-slide-to="4" alt="">
 						</div>
 						<h5 class="card-title mbr-fonts-style display-7">
-						<!-- editavel -->	<strong>Nome</strong>
+						
 						</h5>
 					</div>
 				</div>
@@ -218,13 +264,13 @@
 				<div class="item-wrapper">
 					<div class="card-box align-left">
 						<!-- editavel --><p class="card-text mbr-fonts-style display-7">
-							I've received so many inquiries about where I get my outfits. Keep up the fantastic work!
+                        <?php echo htmlspecialchars($comentario6); ?>
 						</p>
 						<div class="img-wrapper mt-4 mb-2">
 						<!-- editavel -->	<img src="assets/images/img-3909-2-original-160x213.jpg" data-slide-to="5" data-bs-slide-to="5" alt="">
 						</div>
 						<h5 class="card-title mbr-fonts-style display-7">
-						<!-- editavel -->	<strong>Nome</strong>
+						
 						</h5>
 					</div>
 				</div>
@@ -241,8 +287,8 @@
         <div class="row justify-content-center">
             <div class="col-12 content-head">
                 <div class="mbr-section-head mb-5">
-                <h3 class="mbr-section-title mbr-fonts-style align-center m-0 display-2"><strong>E como é a Italia?</strong></h3>
-                <h4 class="mbr-section-subtitle mbr-fonts-style align-center mb-0 mt-4 display-7">Venha Conferir comigo</h4>
+                <h3 class="mbr-section-title mbr-fonts-style align-center m-0 display-2"><strong><?php echo htmlspecialchars($tituloGaleria); ?></strong></h3>
+                <h4 class="mbr-section-subtitle mbr-fonts-style align-center mb-0 mt-4 display-7"><?php echo htmlspecialchars($subTituloGaleria); ?></h4>
                 </div>
             </div>
         </div>

@@ -85,7 +85,7 @@ $result = $conn->query($sql);
 						<a class="nav-link link text-black text-primary display-4" href="index.html">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="page1.html" aria-expanded="false">Blog</a>
+						<a class="nav-link link text-black text-primary display-4" href="page1.php" aria-expanded="false">Blog</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link link text-black text-primary display-4" href="page2.html">Cadastrar</a>
@@ -149,6 +149,7 @@ $result = $conn->query($sql);
                             
                         <!-- Campo de pesquisa -->
                         <input type="text" id="searchInput" class="form-control search-bar" onkeyup="filterTable()" placeholder="Pesquise por nomes...">
+                        <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -173,9 +174,18 @@ $result = $conn->query($sql);
                                                 <form action="alterar_status.php" method="POST" style="display:inline;">
                                                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                                     <input type="hidden" name="status" value="<?php echo $row['status'] == 'Ativo' ? 'Inativo' : 'Ativo'; ?>">
-                                                    <button type="submit" class="btn btn-sm btn-primary">
-                                                        <?php echo $row['status'] == 'Ativo' ? 'Inativar' : 'Ativar'; ?>
-                                                    </button>
+                                                    <div class="col-30 col-sm-12 col-md-12 col-lg-12">
+                                                        <button type="submit" class="btn btn-primary btn-block">
+                                                            <!-- Texto completo para telas médias e maiores -->
+                                                            <span class="d-none d-md-inline">
+                                                                <?php echo $row['status'] == 'Ativo' ? 'Inativar' : 'Ativar'; ?>
+                                                            </span>
+                                                            <!-- Texto abreviado para telas pequenas -->
+                                                            <span class="d-md-none">
+                                                                <?php echo $row['status'] == 'Ativo' ? 'I' : 'A'; ?>
+                                                            </span>
+                                                        </button>
+                                                    </div>
                                                 </form>
                                             </td>
                                         </tr>
@@ -187,6 +197,7 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                        </div>
                                 </div>
                         </div>
                     </div>
@@ -205,6 +216,7 @@ $result = $conn->query($sql);
                                 $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0): ?>
+                                <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -226,14 +238,22 @@ $result = $conn->query($sql);
                                                     <td><?php echo $row['status']; ?></td>
                                                     <td>
                                                         <form action="excluir_usuario.php" method="POST" style="display:inline;">
+                                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                                             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                                            <button type="submit" class="btn btn-sm btn-danger btn-block">
+                                                                <!-- Texto completo para telas médias e maiores -->
+                                                                <span class="d-none d-md-inline">Excluir</span>
+                                                                <!-- Texto abreviado para telas pequenas -->
+                                                                <span class="d-md-none">Exc.</span>
+                                                            </button>
+                                                        </div>
                                                         </form>
                                                     </td>
                                                 </tr>
                                             <?php endwhile; ?>
                                         </tbody>
                                     </table>
+                                    </div>
                                 <?php else: ?>
                                     <p>Nenhum aluno cadastrado.</p>
                                 <?php endif; ?>
@@ -297,7 +317,7 @@ $result = $conn->query($sql);
                                     <!-- Adicionar imagem -->
                                     <div class="form-group">
                                         <label for="imagem">Adicionar imagem:</label>
-                                        <input type="file" class="form-control-file" id="imagem" name="imagem" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagem" name="imagem" accept="image/*">
                                     </div>
 
                                     <!-- Título Comentários -->
@@ -313,7 +333,7 @@ $result = $conn->query($sql);
                                     </div>
                                     <div class="form-group">
                                         <label for="fotoComentario1">Foto Comentário 1:</label>
-                                        <input type="file" class="form-control-file" id="fotoComentario1" name="fotoComentario1" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="fotoComentario1" name="fotoComentario1" accept="image/*" >
                                     </div>
 
                                     <!-- Comentário 2 -->
@@ -323,7 +343,7 @@ $result = $conn->query($sql);
                                     </div>
                                     <div class="form-group">
                                         <label for="fotoComentario2">Foto Comentário 2:</label>
-                                        <input type="file" class="form-control-file" id="fotoComentario2" name="fotoComentario2" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="fotoComentario2" name="fotoComentario2" accept="image/*" >
                                     </div>
 
                                     <!-- Comentário 3 -->
@@ -333,7 +353,7 @@ $result = $conn->query($sql);
                                     </div>
                                     <div class="form-group">
                                         <label for="fotoComentario3">Foto Comentário 3:</label>
-                                        <input type="file" class="form-control-file" id="fotoComentario3" name="fotoComentario3" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="fotoComentario3" name="fotoComentario3" accept="image/*" >
                                     </div>
 
                                     <!-- Comentário 4 -->
@@ -343,7 +363,7 @@ $result = $conn->query($sql);
                                     </div>
                                     <div class="form-group">
                                         <label for="fotoComentario4">Foto Comentário 4:</label>
-                                        <input type="file" class="form-control-file" id="fotoComentario4" name="fotoComentario4" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="fotoComentario4" name="fotoComentario4" accept="image/*" >
                                     </div>
 
                                     <!-- Comentário 5 -->
@@ -353,7 +373,7 @@ $result = $conn->query($sql);
                                     </div>
                                     <div class="form-group">
                                         <label for="fotoComentario5">Foto Comentário 5:</label>
-                                        <input type="file" class="form-control-file" id="fotoComentario5" name="fotoComentario5" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="fotoComentario5" name="fotoComentario5" accept="image/*"> 
                                     </div>
 
                                     <!-- Comentário 6 -->
@@ -363,7 +383,7 @@ $result = $conn->query($sql);
                                     </div>
                                     <div class="form-group">
                                         <label for="fotoComentario6">Foto Comentário 6:</label>
-                                        <input type="file" class="form-control-file" id="fotoComentario6" name="fotoComentario6" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="fotoComentario6" name="fotoComentario6" accept="image/*" >
                                     </div>
 
                                     <!-- Título Galeria -->
@@ -381,48 +401,49 @@ $result = $conn->query($sql);
                                     <!-- Imagem 1 da Galeria -->
                                     <div class="form-group">
                                         <label for="imagemGaleria1">Imagem 1 da Galeria:</label>
-                                        <input type="file" class="form-control-file" id="imagemGaleria1" name="imagemGaleria1" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagemGaleria1" name="imagemGaleria1" accept="image/*" >
                                     </div>
 
                                     <!-- Imagem 2 da Galeria -->
                                     <div class="form-group">
                                         <label for="imagemGaleria2">Imagem 2 da Galeria:</label>
-                                        <input type="file" class="form-control-file" id="imagemGaleria2" name="imagemGaleria2" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagemGaleria2" name="imagemGaleria2" accept="image/*" >
                                     </div>
 
                                     <!-- Imagem 3 da Galeria -->
                                     <div class="form-group">
                                         <label for="imagemGaleria3">Imagem 3 da Galeria:</label>
-                                        <input type="file" class="form-control-file" id="imagemGaleria3" name="imagemGaleria3" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagemGaleria3" name="imagemGaleria3" accept="image/*" >
                                     </div>
 
                                     <!-- Imagem 4 da Galeria -->
                                     <div class="form-group">
                                         <label for="imagemGaleria4">Imagem 4 da Galeria:</label>
-                                        <input type="file" class="form-control-file" id="imagemGaleria4" name="imagemGaleria4" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagemGaleria4" name="imagemGaleria4" accept="image/*" >
                                     </div>
 
                                     <!-- Imagem 5 da Galeria -->
                                     <div class="form-group">
                                         <label for="imagemGaleria5">Imagem 5 da Galeria:</label>
-                                        <input type="file" class="form-control-file" id="imagemGaleria5" name="imagemGaleria5" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagemGaleria5" name="imagemGaleria5" accept="image/*">
                                     </div>
 
                                     <!-- Imagem 6 da Galeria -->
                                     <div class="form-group">
                                         <label for="imagemGaleria6">Imagem 6 da Galeria:</label>
-                                        <input type="file" class="form-control-file" id="imagemGaleria6" name="imagemGaleria6" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagemGaleria6" name="imagemGaleria6" accept="image/*" >
                                     </div>
 
                                     <!-- Imagem 7 da Galeria -->
                                     <div class="form-group">
                                         <label for="imagemGaleria7">Imagem 7 da Galeria:</label>
-                                        <input type="file" class="form-control-file" id="imagemGaleria7" name="imagemGaleria7" accept="image/*" required>
+                                        <input type="file" class="form-control-file" id="imagemGaleria7" name="imagemGaleria7" accept="image/*" >
                                     </div>
 
                                     <!-- Botão de Enviar -->
                                     <button type="submit" class="btn btn-primary btn-block" value="Enviar">Enviar</button>
                                 </form>
+                                
                             </div>
                             </div>
                         </div>

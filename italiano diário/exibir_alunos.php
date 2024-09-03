@@ -55,7 +55,7 @@ $result = $conn->query($sql);
 						<a class="nav-link link text-black text-primary display-4" href="index.html">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="page1.html" aria-expanded="false">Blog</a>
+						<a class="nav-link link text-black text-primary display-4" href="page1.php" aria-expanded="false">Blog</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link link text-black text-primary display-4" href="page2.html">Cadastrar</a>
