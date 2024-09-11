@@ -82,16 +82,16 @@ $result = $conn->query($sql);
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav nav-dropdown" data-app-modern-menu="true"><li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="index.html">Home</a>
+						<a class="nav-link link text-black text-primary display-4" href="index.php">Home</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link link text-black text-primary display-4" href="page1.php" aria-expanded="false">Blog</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="page2.html">Cadastrar</a>
+						<a class="nav-link link text-black text-primary display-4" href="page2.php">Cadastrar</a>
 					</li></ul>
 				
-				<div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="page3.html">Login</a></div>
+				<div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="page3.php">Login</a></div>
 			</div>
 		</div>
 	</nav>
