@@ -12,8 +12,7 @@
   <meta name="keywords" content="Italiano, Italiano Diário, Aprender Italiano, Aula de Italiano, Cultura Italiana, Curso de Italiano">
   
   
-  
-  <title>Italiano Diário</title>
+  <title>Dashbord</title>
   <link rel="stylesheet" href="../../assets/web/assets/mobirise-icons2/mobirise2.css">
   <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap-grid.min.css">
@@ -69,7 +68,7 @@
 	</nav>
 </section>
 
-<section data-bs-version="5.1" class="header1 cid-uj12D9NRil" id="header1-10">
+<section data-bs-version="5.1" class="header1 cid-umaZ3BIyGc" id="header1-1u">
     
 
     
@@ -79,12 +78,14 @@
         <div class="row flex-row-reverse">
             <div class="col-12 col-lg-6 col-md-6 image">
                 <div class="image-wrapper">
-                    <img src="../../assets/images/754a4f77-f595-4264-b1b0-32ea701d61ed-675x1200.jpg" alt="">
+                    <img src="assets/images/754a4f77-f595-4264-b1b0-32ea701d61ed-675x1200.jpg" alt="">
                 </div>
             </div>
             <div class="col-12 col-lg-6 col-md-6 title">
                 <div class="title-wrapper">
-                    <h2 class="mbr-section-title mbr-fonts-style display-1"><strong>Hora de </strong><br><strong>praticar</strong></h2>
+                    <h2 class="mbr-section-title mbr-fonts-style display-1"><strong>Gestione
+</strong><div><strong>Di
+</strong></div><div><strong>studenti</strong></div></h2>
                     
                 </div>
             </div>
