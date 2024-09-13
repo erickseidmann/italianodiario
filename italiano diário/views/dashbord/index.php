@@ -5,8 +5,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit;
 }
 
-// Conteúdo do painel do aluno
-echo "Bem-vindo ao seu painel, " . $_SESSION['name'] . "!";
+
 ?>
 <!DOCTYPE html>
 <html  >
@@ -35,7 +34,7 @@ include '../comun/headeralunos.php';
             <div class="col-12 col-md-12 col-lg-10 m-auto">
                 <div class="content">
                     <div class="mbr-section-head align-left mb-5">
-                        <h4 class="mbr-section-subtitle mb-2 mbr-fonts-style display-5"><strong>Exercicios</strong></h4>
+                        <h4 class="mbr-section-subtitle mb-2 mbr-fonts-style display-5"><strong><?php echo "Bem-vindo, " . $_SESSION['name'] . "!"; ?></strong></h4>
                         
                     </div>
                     <div id="bootstrap-accordion_29" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">
