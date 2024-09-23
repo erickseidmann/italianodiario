@@ -172,17 +172,17 @@ function checkAnswers(activityNumber) {
 
     rows.forEach((row) => {
         const singular = row.cells[1].textContent.trim();
-        const input = row.cells[2].querySelector('input').value.trim();
+        const input = row.cells[2].querySelector('input').value.trim().toLowerCase(); // Converte a entrada para minúsculas
+        const correctPlural = getPlural1(singular).toLowerCase(); // Converte a resposta correta para minúsculas
         const feedback = row.cells[3].querySelector('small');
 
         feedback.innerHTML = '';
 
-        if (input === getPlural1(singular)) {
+        if (input === correctPlural) {
             feedback.innerHTML = '<span class="text-success">&#10004;</span>';
             feedback.className = 'text-success';
             correctCount++;
         } else {
-            const correctPlural = getPlural1(singular);
             feedback.innerHTML = `
                 <span class="text-danger" 
                       data-toggle="tooltip" 
@@ -204,6 +204,7 @@ function checkAnswers(activityNumber) {
     // Ativa tooltips
     $('[data-toggle="tooltip"]').tooltip();
 }
+
 function sendAttemptData1(correctCount, incorrectCount, score, activityNumber) {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'save_attempt.php', true);
