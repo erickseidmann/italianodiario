@@ -1,27 +1,32 @@
 <?php
-// Conectar ao banco de dados
-include '../../config/config.php'; // Seu arquivo de conexão com o MySQL
+include '../../config/config.php';
 
-// Receber os dados enviados via POST
-$data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents("php://input"), true);
+$activityNumber = $data['activityNumber'];
+$words = $data['words'];
 
-// Verificar se os dados foram recebidos
-if ($data) {
-    // Loop para salvar cada palavra no banco de dados
-    foreach ($data as $word) {
-        $singular = $word['singular'];
+foreach ($words as $word) {
+    $singular = $word['singular'];
 
-        // Preparar e executar a inserção
-        $stmt = $conn->prepare("INSERT INTO palavras_singular (singular) VALUES (?)");
-        $stmt->bind_param("s", $singular);
+    // Verifica se a palavra já existe
+    $checkQuery = "SELECT COUNT(*) FROM palavras_singular WHERE singular = ? AND atividade_id = ?";
+    $checkStmt = $conn->prepare($checkQuery);
+    $checkStmt->bind_param("si", $singular, $activityNumber);
+    $checkStmt->execute();
+    $checkStmt->bind_result($count);
+    $checkStmt->fetch();
+    $checkStmt->close();
+
+    // Se a palavra não existir, insere
+    if ($count === 0) {
+        $query = "INSERT INTO palavras_singular (singular, atividade_id) VALUES (?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("si", $singular, $activityNumber);
         $stmt->execute();
+        $stmt->close();
     }
-
-    echo "Palavras salvas com sucesso!";
-} else {
-    echo "Nenhuma palavra recebida.";
 }
 
-// Fechar a conexão
-$conn->close();
+echo json_encode(['status' => 'success']);
 ?>
+

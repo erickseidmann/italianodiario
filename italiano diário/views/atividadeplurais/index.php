@@ -8,52 +8,69 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 // Conectar ao banco de dados
 include '../../config/config.php';
 
-// Consultar palavras salvas para exibir na tabela
-$query = "SELECT id, singular FROM palavras_singular";
+// Consultar palavras salvas para exibir na tabela por atividade
+$query = "SELECT singular, atividade_id FROM palavras_singular ORDER BY atividade_id";
 $result = $conn->query($query);
 
-$words = [];
+$wordsByActivity = [];
 while ($row = $result->fetch_assoc()) {
-    $words[] = $row;
+    $activityId = $row['atividade_id'];
+    if (!isset($wordsByActivity[$activityId])) {
+        $wordsByActivity[$activityId] = [];
+    }
+    $wordsByActivity[$activityId][] = $row['singular'];
 }
+
+// Verificar se o usuário tem email de administrador
+$isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'ADM@adm.com';
+$username = $isAdmin ? 'ADM' : $_SESSION['name'];
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
-    <script src="atividade.js"></script>
+    
     <title>sostantivi al plurale</title>
     <?php
     // Inclui o arquivo de cabeçalho localizado na pasta 'comun'
     include '../comun/headeralunos.php';
     ?>
+    
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="atividade.js"></script>
+    
 </head>
 <body>
 
 <section data-bs-version="5.1" class="list01 replym5 cid-unuJ7pRY0C" id="list01-20">
-    <div class="container" name="Atividade1">
+    <div class="container">
         <div class="row">
             <div class="col-12 col-lg-10">
                 <div class="title-wrapper">
-                    <h3 class="mbr-section-title mbr-fonts-style display-4" name="Titule">
-                        <strong><?php echo $_SESSION['name'] . ", Transforma questi sostantivi al plurale!"; ?></strong>
+                <h3 class="mbr-section-title mbr-fonts-style display-4">
+                        <strong><?php echo "$username, Trasforma questi sostantivi al plurale!"; ?></strong>
                     </h3>
                 </div>
                 <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">
+
+ 
+                            <?php for ($activityNumber = 1; $activityNumber <= 50; $activityNumber++): ?>
                     <div class="card">
-                        <div class="card-header" role="tab" id="headingOne">
-                            <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse1_17" aria-expanded="false" aria-controls="collapse1">
-                                <h4 class="panel-title-edit mbr-fonts-style display-7"><strong>Attività 1</strong></h4>
+                        <div class="card-header" role="tab" id="heading<?php echo $activityNumber; ?>">
+                            <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse<?php echo $activityNumber; ?>" aria-expanded="false" aria-controls="collapse<?php echo $activityNumber; ?>">
+                                <h4 class="panel-title-edit mbr-fonts-style display-7"><strong>Attività <?php echo $activityNumber; ?></strong></h4>
                                 <div class="icon-wrapper">
                                     <span class="sign mbr-iconfont mobi-mbri-plus mobi-mbri"></span>
                                 </div>
                             </a>
                         </div>
-                        <div id="collapse1_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
+                        <div id="collapse<?php echo $activityNumber; ?>" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="heading<?php echo $activityNumber; ?>" data-parent="#accordion">
                             <div class="panel-body">
                                 <div class="container mt-4">
-                                    <div id="score" class="text-center mb-4">Corrette: 0 | Errate: 0</div>
+                                    <div id="score<?php echo $activityNumber; ?>" class="text-center mb-4">Corrette: 0 | Errate: 0</div>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped">
                                             <thead class="table-light">
@@ -62,47 +79,48 @@ while ($row = $result->fetch_assoc()) {
                                                     <th scope="col">Singolare</th>
                                                     <th scope="col">Plurale</th>
                                                     <th scope="col">Feedback</th>
-                                                    <th scope="col">Ações</th> <!-- Nova coluna para ações -->
+                                                    <?php if ($isAdmin): ?>
+                                                    <th scope="col">EXCLUIR</th>
+                                                    <?php endif; ?>
                                                 </tr>
                                             </thead>
-                                            <tbody id="activityBody">
-                                                <?php foreach ($words as $index => $word): ?>
-                                                <tr>
-                                                    <td><?php echo $index + 1; ?></td>
-                                                    <td><?php echo htmlspecialchars($word['singular']); ?></td>
-                                                    <td><input type="text" id="word<?php echo $index + 1; ?>" class=""></td>
-                                                    <td><small id="feedback<?php echo $index + 1; ?>" class="form-text feedback"></small></td>
-                                                    <td>
-                                                        <button class="btn btn-danger btn-sm" onclick="deleteWord(<?php echo $word['id']; ?>, this)">X</button>
-                                                    </td>
-                                                </tr>
-                                                <?php endforeach; ?>
+                                            <tbody id="activityBody<?php echo $activityNumber; ?>">
+                                            <?php if (isset($wordsByActivity[$activityNumber])): ?>
+                                                    <?php foreach ($wordsByActivity[$activityNumber] as $index => $word): ?>
+                                                        <tr>
+                                                            <td><?php echo $index + 1; ?></td>
+                                                            <td><?php echo htmlspecialchars($word); ?></td>
+                                                            <td><input type="text" class=""></td>
+                                                            <td><small class="form-text feedback"></small></td>
+                                                            <?php if ($isAdmin): ?>
+                                                                 <td>
+                                                                     <button onclick="deleteWord(<?php echo $index; ?>, this)">x</button>
+                                                                 </td>
+                                                             <?php endif; ?>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+
                                             </tbody>
+
                                         </table>
                                     </div>
-                                    <button class="btn btn-primary" onclick="checkAnswers1()">Verifica</button>
-
-                                    <!-- Formulário para adicionar novas palavras -->
-                                    <div class="container mt-4">
-                                        <h4>Aggiungi Nuove Parole</h4>
-                                        <div id="addWordsForm">
-                                            <div class="form-group">
-                                                <input type="text" id="newSingularWord" placeholder="Singolare" class="form-control">
-                                                <button class="btn btn-success mt-2" onclick="addWord()">Adicinar</button>
-                                            </div>
-                                            <button class="btn btn-primary mt-2" onclick="salvarPalavras()">Salvar Palavras</button>
-                                        </div>
-                                    </div>
+                                    <button class="btn btn-primary" onclick="checkAnswers(<?php echo $activityNumber; ?>)">Verificar</button>
+                                    <?php if ($isAdmin): ?>
+                                        <input type="text" id="inputSingular<?php echo $activityNumber; ?>" placeholder="Adicionar palavra singular" class="form-control mb-2">
+                                        <button class="btn btn-primary" onclick="addSingleWord(<?php echo $activityNumber; ?>)">Adicionar Palavra</button>
+                                        <button class="btn btn-success" onclick="salvarPalavras(<?php echo $activityNumber; ?>)">Salvar Palavras</button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php endfor; ?>
 
+                </div>
             </div>
         </div>
     </div>
- 
 </section>
 
 <section data-bs-version="5.1" class="footer3 cid-uj14efcLgb" once="footers" id="footer03-15">
@@ -134,126 +152,23 @@ while ($row = $result->fetch_assoc()) {
 <script>
 let wordCount = <?php echo count($words); ?>; // Número inicial de palavras
 
-function addWord() {
-    wordCount++;
-    const tableBody = document.getElementById('activityBody');
-    const newWord = document.getElementById('newSingularWord').value.trim();
+let wordCounters = {}; // Inicializamos os contadores para cada atividade
 
-    if (newWord) {
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>${wordCount}</td>
-            <td>${newWord}</td>
-            <td><input type="text" id="word${wordCount}" class="form-control"></td>
-            <td><small id="feedback${wordCount}" class="form-text feedback"></small></td>
-            <td>
-                <button class="btn btn-danger btn-sm" onclick="deleteWord(${wordCount}, this)">Excluir</button>
-            </td>
-        `;
-        tableBody.appendChild(newRow);
-        document.getElementById('newSingularWord').value = ''; // Limpar o campo após adicionar
-    } else {
-        alert('Por favor, insira uma palavra.');
+<?php foreach ($wordsByActivity as $activityNumber => $words): ?>
+    wordCounters[<?php echo $activityNumber; ?>] = <?php echo count($words); ?>;
+<?php endforeach; ?>
+
+// Caso alguma atividade não tenha palavras, iniciamos o contador como 0
+for (let i = 1; i <= 50; i++) {
+    if (!wordCounters[i]) {
+        wordCounters[i] = 0;
     }
 }
 
-function salvarPalavras() {
-    const words = [];
-    const rows = document.querySelectorAll('#activityBody tr');
 
-    rows.forEach(row => {
-        const singular = row.cells[1].textContent.trim();
-        if (singular) {
-            words.push({ singular: singular });
-        }
-    });
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "salvar_palavras.php", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            alert('Palavras salvas com sucesso!');
-            location.reload(); // Atualizar a página para exibir as palavras salvas
-        }
-    };
-    xhr.send(JSON.stringify(words));
-}
 
-function getPlural1(word) {
-    if (word.endsWith('a')) {
-        return word.slice(0, -1) + 'e';
-    } else if (word.endsWith('o')) {
-        return word.slice(0, -1) + 'i';
-    } else if (word.endsWith('e')) {
-        return word.slice(0, -1) + 'i';
-    } else if (word.endsWith('io')) {
-        return word.slice(0, -2) + 'i';
-    } else {
-        return word; // Caso não seja uma forma comum de plural
-    }
-}
 
-function sendAttemptData1(correctCount, incorrectCount, score) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'save_attempt.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText);
-        }
-    };
-    xhr.send(`correct_count=${correctCount}&incorrect_count=${incorrectCount}&score=${score}`);
-}
-
-function checkAnswers1() {
-    let correctCount = 0;
-    let incorrectCount = 0;
-
-    // Pega todas as linhas da tabela
-    const rows = document.querySelectorAll('tbody tr');
-
-    rows.forEach((row, index) => {
-        const singular = row.cells[1].textContent.trim();
-        const input = row.cells[2].querySelector('input').value.trim();
-        const feedback = row.cells[3].querySelector('small');
-
-        if (input === getPlural1(singular)) {
-            feedback.textContent = 'Correto!';
-            feedback.className = 'text-success';
-            correctCount++;
-        } else {
-            feedback.textContent = 'Incorreto.';
-            feedback.className = 'text-danger';
-            incorrectCount++;
-        }
-    });
-
-    // Atualiza o contador de respostas
-    document.getElementById('score').textContent = `Corrette: ${correctCount} | Errate: ${incorrectCount}`;
-    sendAttemptData1(correctCount, incorrectCount, correctCount / (correctCount + incorrectCount) * 100);
-}
-
-// Função de exclusão de palavras
-function deleteWord(wordId, btnElement) {
-    if (confirm('Tem certeza de que deseja excluir esta palavra?')) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'excluir_palavra.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                if (response.status === 'success') {
-                    // Remove a linha da tabela
-                    btnElement.closest('tr').remove();
-                } else {
-                    alert('Erro ao excluir a palavra.');
-                }
-            }
-        };
-        xhr.send(`id=${wordId}`);
-    }
-}
 </script>
 </body>
 </html>

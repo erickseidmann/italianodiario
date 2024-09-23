@@ -1,0 +1,56 @@
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: normal;
+   font-display: swap;
+   font-weight: 500;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/500.ttf') format('truetype');
+}
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: normal;
+   font-display: swap;
+   font-weight: 600;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/600.ttf') format('truetype');
+}
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: normal;
+   font-display: swap;
+   font-weight: 700;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/700.ttf') format('truetype');
+}
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: regular;
+   font-display: swap;
+   font-weight: 400;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/regular.ttf') format('truetype');
+}
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: italic;
+   font-display: swap;
+   font-weight: 400;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/italic.ttf') format('truetype');
+}
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: italic;
+   font-display: swap;
+   font-weight: 500;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/500italic.ttf') format('truetype');
+}
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: italic;
+   font-display: swap;
+   font-weight: 600;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/600italic.ttf') format('truetype');
+}
+@font-face {
+   font-family: 'Brygada 1918';
+   font-style: italic;
+   font-display: swap;
+   font-weight: 700;
+   src: url('file:///C:/wamp64/www/italianodiario/italiano%C2%A0di%C3%A1rio/fonts/Brygada 1918/700italic.ttf') format('truetype');
+}
