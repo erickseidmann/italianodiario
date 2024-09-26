@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['loggedin'] = true;
         $_SESSION['email'] = $email;
         $_SESSION['role'] = 'admin'; // Definir o papel do usuário como administrador
-        header("Location: ../views/adm/index.php");
+        header("Location: ../views/adm/");
         exit;
     } else {
         // Prepara a declaração SQL para evitar SQL Injection
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['loggedin'] = true;
                 $_SESSION['email'] = $email;
                 $_SESSION['name'] = $row['name']; // Armazena o nome do usuário na sessão
-                header("Location: ../views/dashbord/index.php");
+                header("Location: ../views/dashbord/");
                 exit;
             } else {
                 // Senha incorreta

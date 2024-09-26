@@ -53,16 +53,16 @@
 			</button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav nav-dropdown" data-app-modern-menu="true"><li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="../home/index.php">Home</a>
+						<a class="nav-link link text-black text-primary display-4" href="../home/">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="../blog/index.php" aria-expanded="false">Blog</a>
+						<a class="nav-link link text-black text-primary display-4" href="../blog/" aria-expanded="false">Blog</a>
 					</li>
 					<li class="nav-item dropdown">
-                    <a class="nav-link link text-black text-primary dropdown-toggle display-4" href="page2.php" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Atividades</a><div class="dropdown-menu" aria-labelledby="dropdown-580"><a class="text-black text-primary dropdown-item display-4" href="../atividadeplurais/index.php">Plurale</a><a class="text-black text-primary dropdown-item display-4" href="page6.php">Completa le frasi</a><a class="text-black text-primary dropdown-item display-4" href="page11.php">Vero o falso</a><a class="text-black text-primary dropdown-item display-4" href="page7.php">Completa il testo</a><a class="text-black text-primary dropdown-item display-4" href="page8.php">Trascrivi l'audio</a></div>
+                    <a class="nav-link link text-black text-primary dropdown-toggle display-4" href="page2.php" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Atividades</a><div class="dropdown-menu" aria-labelledby="dropdown-580"><a class="text-black text-primary dropdown-item display-4" href="../atividadeplurais/">Plurale</a><a class="text-black text-primary dropdown-item display-4" href="page6.php">Completa le frasi</a><a class="text-black text-primary dropdown-item display-4" href="page11.php">Vero o falso</a><a class="text-black text-primary dropdown-item display-4" href="page7.php">Completa il testo</a><a class="text-black text-primary dropdown-item display-4" href="page8.php">Trascrivi l'audio</a></div>
 					</li></ul>
 				
-				<div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="../login/index.php">Login</a></div>
+				<div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="../login/">Login</a></div>
 			</div>
 		</div>
 	</nav>

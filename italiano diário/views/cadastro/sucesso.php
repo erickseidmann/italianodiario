@@ -33,7 +33,7 @@ include '../comun/header.php';
                                 Cadastro realizado com sucesso! 
                                
                             </div>
-                            <a href="../home/index.php" class="alert-link">Voltar para a página inicial</a>.
+                            <a href="../home/" class="alert-link">Voltar para a página inicial</a>.
                         </div>
                     </div>
                 </div>

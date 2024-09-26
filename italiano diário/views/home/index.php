@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html  >
 <head>
-  
+  <?php
+  $rota = explode("/", $_GET['url']??'home');
+  if (file_exists("/home/{$rota[0]}.php")){
+    include "/home/{$rota[0]}.php";
+  }
+  ?>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
@@ -52,16 +57,16 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav nav-dropdown" data-app-modern-menu="true"><li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="../home/index.php">Home</a>
+						<a class="nav-link link text-black text-primary display-4" href="../home/">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="../blog/index.php" aria-expanded="false">Blog</a>
+						<a class="nav-link link text-black text-primary display-4" href="../blog/" aria-expanded="false">Blog</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link link text-black text-primary display-4" href="../cadastro/index.php">Cadastrar</a>
+						<a class="nav-link link text-black text-primary display-4" href="../cadastro/">Cadastrar</a>
 					</li></ul>
 				
-				<div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="../login/index.php">Login</a></div>
+				<div class="navbar-buttons mbr-section-btn"><a class="btn btn-primary display-4" href="../login/">Login</a></div>
 			</div>
 		</div>
 	</nav>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: ../login/index.php");
+    header("Location: ../login/");
     exit;
 }
 
@@ -196,7 +196,7 @@ include '../comun/headeralunos.php';
                     <div class="item-content">
                        
                         <p class="mbr-text mbr-fonts-style mt-3 display-7">transforma questi sostantivi al plurale </p>
-                        <div class="mbr-section-btn item-footer mt-2"><a href="../atividadeplurais/index.php" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
+                        <div class="mbr-section-btn item-footer mt-2"><a href="../atividadeplurais/" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
                     </div>
                     
                 </div>
