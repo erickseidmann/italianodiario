@@ -61,7 +61,7 @@ $username = $isAdmin ? 'ADM' : $_SESSION['name'];
                     <div class="card">
                         <div class="card-header" role="tab" id="heading<?php echo $activityNumber; ?>">
                             <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse<?php echo $activityNumber; ?>" aria-expanded="false" aria-controls="collapse<?php echo $activityNumber; ?>">
-                                <h4 class="panel-title-edit mbr-fonts-style display-7"><strong>Attività <?php echo $activityNumber; ?></strong></h4>
+                                <h4 class="panel-title-edit mbr-fonts-style display-7"><strong>Attività <?php echo $activityNumber; ?> - Trasforma questi sostantivi al plurale </strong></h4>
                                 <div class="icon-wrapper">
                                     <span class="sign mbr-iconfont mobi-mbri-plus mobi-mbri"></span>
                                 </div>
@@ -70,6 +70,7 @@ $username = $isAdmin ? 'ADM' : $_SESSION['name'];
                         <div id="collapse<?php echo $activityNumber; ?>" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="heading<?php echo $activityNumber; ?>" data-parent="#accordion">
                             <div class="panel-body">
                                 <div class="container mt-4">
+                                
                                     <div id="score<?php echo $activityNumber; ?>" class="text-center mb-4">Corrette: 0 | Errate: 0</div>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped">

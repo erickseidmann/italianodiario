@@ -209,10 +209,12 @@ function sendAttemptData1(correctCount, incorrectCount, score, activityNumber) {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'save_attempt.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText);
+            console.log(xhr.responseText);  // Exibe a resposta do PHP
         }
     };
+
     xhr.send(`activity_number=${activityNumber}&correct_count=${correctCount}&incorrect_count=${incorrectCount}&score=${score}`);
 }
