@@ -8,10 +8,43 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 // Conectar ao banco de dados
 include '../../config/config.php';
 
-// Consultar as pontuações do banco de dados
-$query = "SELECT user_name, activity_number, correct_count, incorrect_count, score, attempt_date FROM activity_scores ORDER BY attempt_date DESC";
-$result = $conn->query($query);
+// Obter o nome do usuário logado
+$user_name = $_SESSION['name'];
 
+// Consultar as pontuações do banco de dados filtradas pelo usuário logado
+$query_scores = "SELECT user_name, activity_number, correct_count, incorrect_count, score, attempt_date 
+                 FROM activity_scores 
+                 WHERE user_name = ? 
+                 ORDER BY attempt_date DESC";
+
+// Preparar a consulta
+$stmt_scores = $conn->prepare($query_scores);
+$stmt_scores->bind_param("s", $user_name);
+$stmt_scores->execute();
+$result_scores = $stmt_scores->get_result();
+
+if ($result_scores === false) {
+    die("Erro na consulta de scores: " . $conn->error);
+}
+
+// Consultar resultados das atividades filtradas pelo usuário logado
+$query_results = "SELECT user_name, atividade_id, corretas, erradas, pontuacao, data 
+                  FROM resultados_atividades 
+                  WHERE user_name = ? 
+                  ORDER BY data DESC";
+
+// Preparar a consulta
+$stmt_results = $conn->prepare($query_results);
+$stmt_results->bind_param("s", $user_name);
+$stmt_results->execute();
+$result_results = $stmt_results->get_result();
+
+if ($result_results === false) {
+    die("Erro na consulta de resultados: " . $conn->error);
+}
+
+// Fechar a conexão ao banco de dados
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html  >
@@ -54,78 +87,78 @@ include '../comun/headeralunos.php';
                             </div>
                             <div id="collapse1_29" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_29">
                             <div class="table-responsive">
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Usuário</th>
-                <th scope="col">Atividade</th>
-                <th scope="col">Acertos</th>
-                <th scope="col">Erros</th>
-                <th scope="col">Pontuação</th>
-                <th scope="col">Data</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result->num_rows > 0): ?>
-                <?php while($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['user_name']); ?></td>
-                        <td><?php echo htmlspecialchars($row['activity_number']); ?></td>
-                        <td><?php echo htmlspecialchars($row['correct_count']); ?></td>
-                        <td><?php echo htmlspecialchars($row['incorrect_count']); ?></td>
-                        <td><?php echo intval($row['score']); ?></td>
-                        <td><?php echo date('d/m/y - H:i', strtotime($row['attempt_date'])); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" class="text-center">Nenhum dado encontrado.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>
+                            <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Usuário</th>
+                                                <th scope="col">Atividade</th>
+                                                <th scope="col">Acertos</th>
+                                                <th scope="col">Erros</th>
+                                                <th scope="col">Pontuação</th>
+                                                <th scope="col">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if ($result_scores->num_rows > 0): ?>
+                                                <?php while($row = $result_scores->fetch_assoc()): ?>
+                                                    <tr>
+                                                        <td><?php echo htmlspecialchars($row['user_name']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['activity_number']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['correct_count']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['incorrect_count']); ?></td>
+                                                        <td><?php echo intval($row['score']); ?></td>
+                                                        <td><?php echo date('d/m/y - H:i', strtotime($row['attempt_date'])); ?></td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            <?php else: ?>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">Nenhum dado encontrado.</td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="card mb-3">
                             <div class="card-header" role="tab" id="headingOne">
                                 <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse2_29" aria-expanded="false" aria-controls="collapse2">
 
-                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Histórico e pontuações completa la frasi</h6>
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Histórico e pontuações Trascrivi l'audio</h6>
                                     <span class="sign mbr-iconfont mobi-mbri-plus mobi-mbri"></span>
                                 </a>
                             </div>
                             <div id="collapse2_29" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_29">
                                 <div class="panel-body">
-                                <table class="table">
-                                      <thead>
-                                        <tr>
-                                          <th scope="col">Exercicio</th>
-                                          <th scope="col">Tentativa</th>
-                                          <th scope="col">Pontuação</th>
-                                          <th scope="col">Data</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <th scope="row">plurale</th>
-                                          <td>1</td>
-                                          <td>10</td>
-                                          <td>12/07/24</td>
-                                        </tr>
-                                        <tr>
-                                          <th scope="row">plurale</th>
-                                          <td>2</td>
-                                          <td>12</td>
-                                          <td>12/07/24</td>
-                                        </tr>
-                                        <tr>
-                                          <th scope="row">plurale</th>
-                                          <td>3</td>
-                                          <td>13</td>
-                                          <td>12/07/24</td>
-                                        </tr>
-                                      </tbody>
+                                <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Nome do Usuário</th>
+                                                <th scope="col">ID da Atividade</th>
+                                                <th scope="col">Corretas</th>
+                                                <th scope="col">Erradas</th>
+                                                <th scope="col">Pontuação</th>
+                                                <th scope="col">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if ($result_results->num_rows > 0): ?>
+                                                <?php while($row = $result_results->fetch_assoc()): ?>
+                                                    <tr>
+                                                        <td><?php echo htmlspecialchars($row['user_name'], ENT_QUOTES); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['atividade_id']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['corretas']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['erradas']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['pontuacao']); ?></td>
+                                                        <td><?php echo (new DateTime($row['data']))->format('d-m-y H:i'); ?></td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            <?php else: ?>
+                                                <tr>
+                                                    <td colspan="6">Nenhum resultado encontrado.</td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -133,38 +166,42 @@ include '../comun/headeralunos.php';
                         <div class="card mb-3">
                             <div class="card-header" role="tab" id="headingOne">
                                 <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse3_29" aria-expanded="false" aria-controls="collapse3">
-                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Mauris
-                                        porttitor tempor orci vitae?</h6>
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Histórico e pontuações Vero o falso</h6>
                                     <span class="sign mbr-iconfont mobi-mbri-plus mobi-mbri"></span>
                                 </a>
                             </div>
                             <div id="collapse3_29" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_29">
                                 <div class="panel-body">
                                     <p class="mbr-fonts-style panel-text display-4">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vestibulum
-                                        laoreet tincidunt. Proin et sapien scelerisque, ornare lectus eget, iaculis
-                                        lectus. Pellentesque viverra molestie tortor. Nunc sed interdum est, in maximus
-                                        diam. Donec eu tellus dictum, gravida velit et, sagittis arcu. Proin et lectus
-                                        dapibus. Cras fringilla elit velit placerat tortor mollis cursus.</p>
+                                    Data de lançamento 14/10/2024 - Data di rilascio 14/10/2024</p>
                                 </div>
                             </div>
                         </div>
                         <div class="card mb-3">
                             <div class="card-header" role="tab" id="headingOne">
                                 <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse4_29" aria-expanded="false" aria-controls="collapse4">
-                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Ut ultricies
-                                        imperdiet volutpat?</h6>
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Histórico e pontuações completa le frasi</h6>
                                     <span class="sign mbr-iconfont mobi-mbri-plus mobi-mbri"></span>
                                 </a>
                             </div>
                             <div id="collapse4_29" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_29">
                                 <div class="panel-body">
                                     <p class="mbr-fonts-style panel-text display-4">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vestibulum
-                                        laoreet tincidunt. Proin et sapien scelerisque, ornare lectus eget, iaculis
-                                        lectus. Pellentesque viverra molestie tortor. Nunc sed interdum est, in maximus
-                                        diam. Donec eu tellus dictum, gravida velit et, sagittis arcu. Proin et lectus
-                                        dapibus. Cras fringilla elit velit placerat tortor mollis cursus.</p>
+                                    Data de lançamento 21/10/2024 - Data di rilascio 21/10/2024</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-3" mbr-if="cardAmount > 5">
+                            <div class="card-header" role="tab" id="headingOne">
+                                <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core href="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                                    <h6 class="panel-title-edit mbr-semibold mbr-fonts-style mb-0 display-5">Histórico e pontuações completa la Testo</h6>
+                                    <span class="sign mbr-iconfont mobi-mbri-plus mobi-mbri"></span>
+                                </a>
+                            </div>
+                            <div id="collapse6" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#accordion">
+                                <div class="panel-body">
+                                <p class="mbr-fonts-style panel-text display-4">
+                                Data de lançamento 29/10/2024 - Data di rilascio 29/10/2024</p>
                                 </div>
                             </div>
                         </div>
@@ -211,7 +248,7 @@ include '../comun/headeralunos.php';
                     <div class="item-content">
                        
                         <p class="mbr-text mbr-fonts-style mt-3 display-7">completa le frasi con il verbo essere </p>
-                        <div class="mbr-section-btn item-footer mt-2"><a href="page6.php" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
+                        <div class="mbr-section-btn item-footer mt-2"><a href="" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
                     </div>
                     
                 </div>
@@ -226,7 +263,7 @@ include '../comun/headeralunos.php';
                     <div class="item-content">
                        
                         <p class="mbr-text mbr-fonts-style mt-3 display-7">scegli tra le opzioni quelle giuste&nbsp;</p>
-                        <div class="mbr-section-btn item-footer mt-2"><a href="page7.php" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
+                        <div class="mbr-section-btn item-footer mt-2"><a href="" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
                     </div>
                     
                 </div>
@@ -239,7 +276,7 @@ include '../comun/headeralunos.php';
                     </div>
                     <div class="item-content">
                         <p class="mbr-text mbr-fonts-style mt-3 display-7">Trascrivi l'audio che ascolti</p>
-                        <div class="mbr-section-btn item-footer mt-2"><a href="page8.php" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
+                        <div class="mbr-section-btn item-footer mt-2"><a href="../trascriviaudio/" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
                     </div>
                 </div>
             </div>

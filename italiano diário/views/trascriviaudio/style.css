@@ -1,0 +1,102 @@
+table {
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-bordered { /* Corrigido para .table-bordered */
+    border: none;
+}
+
+.table-bordered td,
+.table-bordered th { /* Corrigido para .table-bordered */
+    border: none;
+}
+
+/* Alargar a primeira coluna */
+.table-bordered td:first-child,
+.table-bordered th:first-child {
+    width: 25%; /* Ajuste este valor conforme necessário */
+}
+
+/* Diminuir a terceira coluna */
+.table-bordered td:nth-child(3),
+.table-bordered th:nth-child(3) {
+    width: 10%; /* Ajuste este valor conforme necessário */
+}
+
+table thead th {
+    border-bottom: 2px solid #dee2e6;
+}
+
+td:first-child {
+    width: 15%;
+}
+
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
+    resize: none;
+}
+
+.summary {
+    width: 100%;
+    text-align: center;
+    color: black; /* 'strong' não é uma cor válida */
+}
+
+.result {
+    width: 100%;
+    text-align: center;
+}
+
+.btn-primary {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.error-message {
+    position: relative;
+    color: red;
+    font-size: 20px; /* Ajuste o tamanho da fonte se necessário */
+}
+
+.tooltip-text {
+    display: none;
+    position: absolute;
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    top: -30px; /* Ajusta a posição acima do X */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    font-size: 12px;
+    white-space: nowrap; /* Evita que o texto quebre em várias linhas */
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3); /* Sombrinha para dar destaque */
+}
+
+.tooltip {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 1000;
+    transition: opacity 0.2s;
+}
+
+.audio-container {
+    display: flex;
+    align-items: center; /* Alinha verticalmente no centro */
+    justify-content: flex-start; /* Alinha à esquerda */
+}
+
+.audio-container button {
+    margin-left: 8px; /* Espaçamento entre o número e o botão */
+}
+
+.audio-column {
+    width: 200px; /* Ajuste este valor conforme necessário */
+}
