@@ -1,3 +1,5 @@
+
+
 function addSentence(atividade_id) {
     var frase = $('#newSentence' + atividade_id).val();
     var explicacao = $('#newExplanation' + atividade_id).val();
@@ -78,7 +80,7 @@ function loadSentences(atividade) {
     $.ajax({
         url: 'listar_frases.php',
         method: 'GET',
-        data: { atividade: atividade },  // Passa o número da atividade para o PHP
+        data: { atividade: atividade },
         dataType: 'json',
         success: function(response) {
             $(`#questions${atividade}`).empty(); // Limpa a tabela antes de adicionar novas frases
@@ -89,7 +91,7 @@ function loadSentences(atividade) {
 
                 $(`#questions${atividade}`).append(`
                     <tr id="question${atividade}${index}">
-                        <td onclick="speakText('${sentence.frase}')">${sentence.frase}</td>
+                        <td  onclick="speakText('${sentence.frase}')">${sentence.frase}</td>
                         <td>
                             <input type="radio" name="sentence${atividade}${index}" value="V"> Vero
                             <br>
@@ -97,7 +99,7 @@ function loadSentences(atividade) {
                         </td>
                         <td id="feedback${atividade}${index}" class="correction"></td>
                         <td>
-                            <button onclick="deleteSentence(${sentence.id}, '${escapedFrase}')" class="delete-btn">X</button>
+                            ${isAdmin ? `<button onclick="deleteSentence(${sentence.id}, '${escapedFrase}')" class="delete-btn">X</button>` : ''}
                         </td>
                     </tr>
                 `);
@@ -114,6 +116,7 @@ function loadSentences(atividade) {
         }
     });
 }
+
 
 
 function deleteSentence(id, frase) {

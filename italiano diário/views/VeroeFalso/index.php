@@ -36,10 +36,24 @@ $totalAtividades = 50;
         .feedback { margin-top: 5px; }
         .sentence-text { cursor: pointer; text-decoration: underline; color: #007bff; }
         .result { margin-top: 10px; }
+
         table, th, td { border: none; }
         tbody { counter-reset: rowNumber; }
         tbody tr { counter-increment: rowNumber; }
         tbody tr td:first-child::before { content: counter(rowNumber) ". "; }
+        thead th {
+    width: auto; /* Ajusta a largura automaticamente */
+}
+
+thead th:nth-child(1) {
+    width: 300px; /* Ajusta a largura da coluna Frase */
+    white-space: nowrap; /* Impede a quebra de linha */
+}
+
+tbody td:nth-child(1) {
+    width: 300px; /* Também aplica a largura à célula do corpo */
+    white-space: nowrap; /* Impede a quebra de linha */
+}
     </style>
 </head>
 <body>
@@ -76,16 +90,19 @@ $totalAtividades = 50;
                                 <span class="d-inline">|</span>
                                 <p id="incorrectCount<?php echo $atividade; ?>" class="d-inline">Frasi sbagliate: 0</p>
                             </div>
-                            <div class="panel-body">
+                            <div class="table-responsive">
                                 <div class="container">
                                     <form id="veroFalsoForm<?php echo $atividade; ?>">
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-striped">
                                                 <thead class="thead-dark">
                                                     <tr>
-                                                        <th>Frase</th>
+                                                        <th style="width: 300px;">Frase</th>
                                                         <th>Selezionare</th>
                                                         <th>Correzione</th>
+                                                        <?php if ($isAdmin): ?>
+                                                            <th>Ação</th> <!-- Coluna de exclusão apenas para administrador -->
+                                                        <?php endif; ?>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="questions<?php echo $atividade; ?>">
@@ -99,6 +116,7 @@ $totalAtividades = 50;
                                 </div>
 
                                 <div class="row mt-4">
+                                <?php if ($isAdmin): ?>
                                     <div class="col-md-6">
                                         <label for="newSentence<?php echo $atividade; ?>">Aggiungi una nuova frase:</label>
                                         <input type="text" id="newSentence<?php echo $atividade; ?>" class="form-control mb-2" placeholder="Es. Lui significa lei - F">
@@ -110,6 +128,7 @@ $totalAtividades = 50;
                                     <div class="col-12">
                                         <button class="btn btn-secondary" onclick="addSentence(<?php echo $atividade; ?>)">Aggiungi Frase</button>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -146,6 +165,9 @@ $totalAtividades = 50;
 <script src="assets/theme/js/script.js"></script>
 <script src="script.js"></script>
 
+<script>
+    var isAdmin = <?php echo json_encode($isAdmin); ?>; // Converte para booleano em JavaScript
+</script>
 
 
 </body>

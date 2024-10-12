@@ -43,6 +43,24 @@ if ($result_results === false) {
     die("Erro na consulta de resultados: " . $conn->error);
 }
 
+
+// Consultar resultados das atividades "Vero o Falso" filtradas pelo usuário logado
+$query_verofalso = "SELECT usuario, atividade, acertos, erros, pontuacao, data 
+                    FROM pontuacaoVeroFalso 
+                    WHERE usuario = ? 
+                    ORDER BY data DESC";
+
+// Preparar a consulta
+$stmt_verofalso = $conn->prepare($query_verofalso);
+$stmt_verofalso->bind_param("s", $user_name);
+$stmt_verofalso->execute();
+$result_verofalso = $stmt_verofalso->get_result();
+
+if ($result_verofalso === false) {
+    die("Erro na consulta de resultados 'Vero o Falso': " . $conn->error);
+}
+
+
 // Fechar a conexão ao banco de dados
 $conn->close();
 ?>
@@ -129,14 +147,14 @@ include '../comun/headeralunos.php';
                                 </a>
                             </div>
                             <div id="collapse2_29" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_29">
-                                <div class="panel-body">
+                                <div class="table-responsive">
                                 <table class="table table-bordered table-striped">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th scope="col">Nome do Usuário</th>
-                                                <th scope="col">ID da Atividade</th>
-                                                <th scope="col">Corretas</th>
-                                                <th scope="col">Erradas</th>
+                                            <th scope="col">Usuário</th>
+                                                <th scope="col">Atividade</th>
+                                                <th scope="col">Acertos</th>
+                                                <th scope="col">Erros</th>
                                                 <th scope="col">Pontuação</th>
                                                 <th scope="col">Data</th>
                                             </tr>
@@ -150,7 +168,8 @@ include '../comun/headeralunos.php';
                                                         <td><?php echo htmlspecialchars($row['corretas']); ?></td>
                                                         <td><?php echo htmlspecialchars($row['erradas']); ?></td>
                                                         <td><?php echo htmlspecialchars($row['pontuacao']); ?></td>
-                                                        <td><?php echo (new DateTime($row['data']))->format('d-m-y H:i'); ?></td>
+                                                        
+                                                        <td><?php echo date('d/m/y - H:i', strtotime($row['data'])); ?></td>
                                                     </tr>
                                                 <?php endwhile; ?>
                                             <?php else: ?>
@@ -171,9 +190,37 @@ include '../comun/headeralunos.php';
                                 </a>
                             </div>
                             <div id="collapse3_29" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_29">
-                                <div class="panel-body">
-                                    <p class="mbr-fonts-style panel-text display-4">
-                                    Data de lançamento 14/10/2024 - Data di rilascio 14/10/2024</p>
+                                <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                            <th scope="col">Usuário</th>
+                                                <th scope="col">Atividade</th>
+                                                <th scope="col">Acertos</th>
+                                                <th scope="col">Erros</th>
+                                                <th scope="col">Pontuação</th>
+                                                <th scope="col">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if ($result_verofalso->num_rows > 0): ?>
+                                                <?php while($row = $result_verofalso->fetch_assoc()): ?>
+                                                    <tr>
+                                                        <td><?php echo htmlspecialchars($row['usuario'], ENT_QUOTES); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['atividade']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['acertos']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['erros']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['pontuacao']); ?></td>
+                                                        <td><?php echo date('d/m/y - H:i', strtotime($row['data'])); ?></td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            <?php else: ?>
+                                                <tr>
+                                                    <td colspan="6">Nenhum resultado encontrado.</td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
