@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cria il tuo esercizio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100px;
+            padding: 5px;
+            margin: 5px 0;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .incorrect {
+            color: red;
+        }
+
+        .result {
+            margin-left: 15px;
+        }
+
+        .exercise {
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Cria il tuo esercizio</h2>
+
+<!-- Exibir pontuação -->
+<div id="score" class="score">
+    Corrette: 0 | Errate: 0
+</div>
+
+<p>Inserisci una frase e scegli quale parola vuoi nascondere:</p>
+
+
+
+
+<!-- Exibir as frases geradas -->
+<div id="exercisesSection"></div>
+
+<!-- Botão para verificar as respostas -->
+<div id="verifySection" style="display: none;">
+    <button type="button" onclick="checkAllAnswers()">Verifica le risposte</button>
+</div>
+<!-- Form para criar a frase -->
+<form id="createExerciseForm">
+    <label for="sentence">Frase: <input type="text" id="sentence" placeholder="Es. Io sono felice"></label>
+    <label for="wordToHide">Parola da nascondere: <input type="text" id="wordToHide" placeholder="Es. felice"></label>
+    <button type="button" onclick="addExercise()">Aggiungi frase</button>
+</form>
+
+<script>
+    let exerciseCount = 0; // Contador de frases
+    let exercises = []; // Array para armazenar os exercícios e as palavras ocultas
+    let correctAnswers = 0; // Contador de respostas corretas
+    let wrongAnswers = 0; // Contador de respostas erradas
+
+    // Função para atualizar a pontuação
+    function updateScore() {
+        document.getElementById('score').textContent = `Corrette: ${correctAnswers} | Errate: ${wrongAnswers}`;
+    }
+
+    // Função para adicionar um exercício
+    function addExercise() {
+        const sentence = document.getElementById('sentence').value.trim();
+        const wordToHide = document.getElementById('wordToHide').value.trim();
+
+        if (sentence === "" || wordToHide === "") {
+            alert("Inserisci una frase e la parola da nascondere.");
+            return;
+        }
+
+        // Verifica se a palavra a esconder está na frase
+        if (sentence.includes(wordToHide)) {
+            exerciseCount++;
+
+            // Substitui a palavra a esconder por um campo de input para o usuário preencher
+            const modifiedSentence = sentence.replace(wordToHide, `<input type="text" id="answer${exerciseCount}" placeholder="___">`);
+
+            // Adiciona o exercício à página com a numeração
+            const exerciseDiv = document.createElement('div');
+            exerciseDiv.classList.add('exercise');
+            exerciseDiv.innerHTML = `<label>${exerciseCount}. ${modifiedSentence} <span id="result${exerciseCount}" class="result"></span></label>`;
+            
+            document.getElementById('exercisesSection').appendChild(exerciseDiv);
+
+            // Armazena o exercício e a palavra oculta
+            exercises.push({
+                sentence: sentence,
+                hiddenWord: wordToHide,
+                id: exerciseCount
+            });
+
+            // Limpa os campos de entrada
+            document.getElementById('sentence').value = '';
+            document.getElementById('wordToHide').value = '';
+
+            // Exibe o botão de verificação se for o primeiro exercício
+            document.getElementById('verifySection').style.display = 'block';
+
+        } else {
+            alert("La parola da nascondere non è presente nella frase.");
+        }
+    }
+
+    // Função para verificar todas as respostas
+    function checkAllAnswers() {
+        correctAnswers = 0;
+        wrongAnswers = 0;
+
+        exercises.forEach(exercise => {
+            const userAnswer = document.getElementById('answer' + exercise.id).value.trim().toLowerCase();
+            const correctAnswer = exercise.hiddenWord.toLowerCase();
+            const resultElement = document.getElementById('result' + exercise.id);
+
+            // Verifica a resposta e exibe o resultado
+            if (userAnswer === correctAnswer) {
+                resultElement.innerHTML = '<span class="correct">Corretto!</span>';
+                correctAnswers++;
+            } else {
+                resultElement.innerHTML = `<span class="incorrect">Errato! La parola giusta era "${exercise.hiddenWord}".</span>`;
+                wrongAnswers++;
+            }
+        });
+
+        // Atualiza a pontuação no topo da página
+        updateScore();
+    }
+</script>
+
+</body>
+</html>

@@ -30,8 +30,8 @@ $totalAtividades = 50;
 
     <!-- Estilos customizados -->
     <style>
-        .correct { color: green; }
-        .incorrect { color: red; }
+        .correct { color: green; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;}
+        .incorrect { color: red;      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;}
         .explanation { font-style: italic; color: #555; }
         .feedback { margin-top: 5px; }
         .sentence-text { cursor: pointer; text-decoration: underline; color: #007bff; }

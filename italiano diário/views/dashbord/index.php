@@ -60,7 +60,20 @@ if ($result_verofalso === false) {
     die("Erro na consulta de resultados 'Vero o Falso': " . $conn->error);
 }
 
+$query_completa_le_frasi = "SELECT  usuario_id, atividade_id, acertos, erros, pontuacao, data 
+                             FROM pontucaocompletafrase
+                             WHERE usuario_id = ? 
+                             ORDER BY data DESC";
 
+// Preparar a consulta
+$stmt_completa_le_frasi = $conn->prepare($query_completa_le_frasi);
+$stmt_completa_le_frasi->bind_param("s", $user_name);
+$stmt_completa_le_frasi->execute();
+$result_completa_le_frasi = $stmt_completa_le_frasi->get_result();
+
+if ($result_completa_le_frasi === false) {
+    die("Erro na consulta de resultados 'Completa le frasi': " . $conn->error);
+}
 // Fechar a conexão ao banco de dados
 $conn->close();
 ?>
@@ -232,9 +245,38 @@ include '../comun/headeralunos.php';
                                 </a>
                             </div>
                             <div id="collapse4_29" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_29">
-                                <div class="panel-body">
-                                    <p class="mbr-fonts-style panel-text display-4">
-                                    Data de lançamento 21/10/2024 - Data di rilascio 21/10/2024</p>
+                                <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                      <thead class="thead-dark">
+                                          <tr>
+                                              <th scope="col">Usuário</th>
+                                              <th scope="col">Atividade</th>
+                                              <th scope="col">Acertos</th>
+                                              <th scope="col">Erros</th>
+                                              <th scope="col">Pontuação</th>
+                                              <th scope="col">Data</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <?php if ($result_completa_le_frasi->num_rows > 0): ?>
+                                              <?php while($row = $result_completa_le_frasi->fetch_assoc()): ?>
+                                                  <tr>
+                                                      <td><?php echo htmlspecialchars($row['usuario_id'], ENT_QUOTES); ?></td>
+                                                      <td><?php echo htmlspecialchars($row['atividade_id']); ?></td>
+                                                      <td><?php echo htmlspecialchars($row['acertos']); ?></td>
+                                                      <td><?php echo htmlspecialchars($row['erros']); ?></td>
+                                                      <td><?php echo round($row['pontuacao']); ?></td>
+                                                      <td><?php echo date('d/m/y - H:i', strtotime($row['data'])); ?></td>
+                                                  </tr>
+                                              <?php endwhile; ?>
+                                          <?php else: ?>
+                                              <tr>
+                                                  <td colspan="6">Nenhum resultado encontrado.</td>
+                                              </tr>
+                                          <?php endif; ?>
+                                      </tbody>
+                                  </table>
+
                                 </div>
                             </div>
                         </div>
@@ -295,7 +337,7 @@ include '../comun/headeralunos.php';
                     <div class="item-content">
                        
                         <p class="mbr-text mbr-fonts-style mt-3 display-7">completa le frasi con il verbo essere </p>
-                        <div class="mbr-section-btn item-footer mt-2"><a href="" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
+                        <div class="mbr-section-btn item-footer mt-2"><a href="../completafrase/" class="btn item-btn btn-lg btn-primary-outline display-7">Iniziare</a></div>
                     </div>
                     
                 </div>
