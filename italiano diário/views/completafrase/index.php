@@ -228,19 +228,33 @@ function obterFrasesAtividade($atividadeId) {
     </div>
 </section>
 
-<section class="footer3 cid-uk6yXl5Q9" id="footer3-u">
+<section data-bs-version="5.1" class="footer3 cid-uj12uPZGRF" once="footers" id="footer03-z">
+
+        
+
+    
+
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-12">
-                <div class="footer-content">
-                    <div class="social-icons">
-                        <a class="socicon-facebook" href="#"><span class="mbr-iconfont mobi-mbri-facebook"></span></a>
-                        <a class="socicon-instagram" href="#"><span class="mbr-iconfont mobi-mbri-instagram"></span></a>
-                    </div>
-                    <p class="mbr-text mbr-fonts-style display-7">
-                        Copyright © 2024 Italiano Diário - All Rights Reserved
-                    </p>
-                </div>
+            <div class="row-links">
+                <ul class="header-menu">
+                  
+                  
+                    
+                  
+                  
+                <li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Home</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Blog</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5">
+                    <a href="#" class="text-white">Login</a>
+                  </li><li class="header-menu-item mbr-fonts-style display-5"><a href="#" class="text-white">Cadastro</a></li></ul>
+              </div>
+
+            
+            <div class="col-12 mt-4">
+                <p class="mbr-fonts-style copyright display-7">© 2024 Italiano Diario. Tutti i diritti riservati.</p>
             </div>
         </div>
     </div>
