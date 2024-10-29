@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="../../assets/dropdown/css/style.css">
   <link rel="stylesheet" href="../../assets/socicon/css/styles.css">
   <link rel="stylesheet" href="../../assets/theme/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;700&display=swap&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;700&display=swap&display=swap"></noscript>
   <link rel="preload" as="style" href="../../assets/mobirise/css/mbr-additional.css?v=Xv8i78"><link rel="stylesheet" href="../../assets/mobirise/css/mbr-additional.css?v=Xv8i78" type="text/css">

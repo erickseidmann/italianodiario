@@ -13,6 +13,21 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'ADM@adm.com';
 $username = $isAdmin ? 'ADM' : $_SESSION['name'];
 $totalAtividades = 100;
 
+
+
+$atividadesDados = []; // Array para armazenar os dados das atividades
+for ($i = 1; $i <= $totalAtividades; $i++) {
+    $stmt = $conn->prepare("SELECT texto, palavras FROM completatexto WHERE atividade_id = ?");
+    $stmt->bind_param("i", $i); // Passa o ID da atividade
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $dadosTextoAtividade = $resultado->fetch_assoc();
+    $atividadesDados[$i] = $dadosTextoAtividade; // Armazena os dados no array
+    $stmt->close();
+}
+
+                
+
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -50,6 +65,20 @@ $totalAtividades = 100;
         #generatedText {
             font-size: 22px; /* Ajuste o valor conforme necessário */
         }
+        button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 24px; /* Tamanho dos ícones */
+            margin: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
     </style>
 
 </head>
@@ -65,12 +94,13 @@ $totalAtividades = 100;
                     </h3>
                 </div>
 
-                <!-- Início do loop para gerar atividades -->
                 <?php for ($atividade = 1; $atividade <= $totalAtividades; $atividade++): ?>
+
+                    
                 <div id="bootstrap-accordion_<?php echo $atividade; ?>" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">
-                    <br> <!-- Linha separadora entre as atividades -->    
+                    <br>    
                     <div class="card">
-                        <div class="card-header" role="tab" id="heading<?php echo $atividade; ?>">
+                        <div class="card-header">
                             <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" href="#collapse<?php echo $atividade; ?>" aria-expanded="false" aria-controls="collapse<?php echo $atividade; ?>">
                                 <h4 class="panel-title-edit mbr-fonts-style display-7">
                                     <strong>Attività <?php echo $atividade; ?> - Scegli tra le opzioni quelle giuste</strong>
@@ -83,57 +113,69 @@ $totalAtividades = 100;
                         
                         <div id="collapse<?php echo $atividade; ?>" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="heading<?php echo $atividade; ?>" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_<?php echo $atividade; ?>">
                             <div class="result mb-3">
-                                <div id="result<?php echo $atividade; ?>" class="result">
-                                   
-                                </div>
+                                <div id="result<?php echo $atividade; ?>" class="result"></div>
                             </div>
                             <div class="table-responsive">
                                 <div class="container">
-                                <!-- Exibir as frases já salvas para esta atividade -->
-                                <h2>Adicione um novo texto e palavras para arrastar</h2>
+                                <?php if ($isAdmin): ?>
+                                                    <h2>Adicione um novo texto e palavras para arrastar</h2>
 
-                                <!-- Formulário para Adicionar Texto e Palavras -->
-                                        <form id="textForm">
-                                            <div class="form-group">
-                                                <label for="inputText">Texto com palavras corretas entre colchetes (exemplo: Mi chiamo [sono]):</label>
-                                                <textarea id="inputText" class="form-control" rows="4" required></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputWords">Palavras (separe por vírgula):</label>
-                                                <input type="text" id="inputWords" class="form-control" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Adicionar Texto e Palavras</button>
-                                        </form>
+                                                    <form id="textForm_<?php echo $atividade; ?>" onsubmit="event.preventDefault(); setupActivity(<?php echo $atividade; ?>, document.getElementById(`inputText_<?php echo $atividade; ?>`).value, document.getElementById(`inputWords_<?php echo $atividade; ?>`).value);">
+                                                        <div class="form-group">
+                                                            <label for="inputText_<?php echo $atividade; ?>">Texto com palavras corretas entre colchetes (exemplo: Mi chiamo [sono]):</label>
+                                                            <textarea id="inputText_<?php echo $atividade; ?>" class="form-control" rows="4" required></textarea>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="inputWords_<?php echo $atividade; ?>">Palavras (separe por vírgula):</label>
+                                                            <input type="text" id="inputWords_<?php echo $atividade; ?>" class="form-control" required>
+                                                        </div>
+                                                        <p>clique no botão duas vezes primeiro para adicionar e revisar e o segundo para salvar</p>
+                                                        <button id="enviartexto_<?php echo $atividade; ?>" class="btn btn-primary">Adicionar Texto e Palavras</button>
+                                                    </form>
+                                                <?php endif; ?>
 
-                                        <hr>
-                                        </div>
-                                            <div id="result" class="mt-3"></div>
-                                        </div>
-                                        <h2>Exercício</h2>
-                                        <div id="exerciseSection" class="d-none">
-                                            <div class="row">
+                                    
+                                    <hr>
+                                    
+                                    <div id="exerciseSection_<?php echo $atividade; ?>" class="d-none">
+                                        <div class="row">
                                             <div class="col-md-6">
-                                                    <h4>Texto:</h4>
-                                                    <p id="generatedText"></p>
-                                                    
-                                                </div>
+                                                <!-- Elemento para exibir a pontuação -->
+                                                <p id="score_<?php echo $atividade; ?>" style="font-weight: bold; color: black;"></p>
+                                                <h4>Testo:</h4>
+                                                <p id="generatedText_<?php echo $atividade; ?>"></p>
+                                            </div>
 
-                                                <div class="col-md-6">
-                                                    <h4>Opções:</h4>
-                                                    <div id="options" class="d-flex flex-wrap"></div>
-                                                    <button id="verifyBtn" class="btn btn-primary">Verificar</button>
-                                                </div>
+                                            <div class="col-md-6">
+                                                <h4>Opzioni:</h4>
+                                                <div id="options_<?php echo $atividade; ?>" class="d-flex flex-wrap"></div>
+                                                <button id="verifyBtn_<?php echo $atividade; ?>" class="btn btn-primary" onclick="verificarResposta(<?php echo $atividade; ?>)">Verificar</button>
+                                                <br>
+                                                <button id="playAudioBtn_<?php echo $atividade; ?>" class="btn btn-primary" onclick="playAudio(<?php echo $atividade; ?>)">
+                                                    <i class="fas fa-play"></i>
+                                                </button>
+                                                <button id="pauseAudioBtn_<?php echo $atividade; ?>" class="btn btn-primary" onclick="pauseAudio(<?php echo $atividade; ?>)">
+                                                    <i class="fas fa-pause"></i>
+                                                </button>
+                                                <button id="stopAudioBtn_<?php echo $atividade; ?>" class="btn btn-primary" onclick="stopAudio(<?php echo $atividade; ?>)">
+                                                    <i class="fas fa-stop"></i>
+                                                </button>
+                                                
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <?php endfor; ?>
-                <!-- Fim do loop -->
             </div>
         </div>
     </div>
 </section>
+
 
 <section data-bs-version="5.1" class="footer3 cid-uj12uPZGRF" once="footers" id="footer03-z">
 
@@ -172,15 +214,211 @@ $totalAtividades = 100;
 <script src="assets/dropdown/js/navbar-dropdown.js"></script>
 <script src="assets/mbr-switch-arrow/mbr-switch-arrow.js"></script>
 <script src="assets/theme/js/script.js"></script>
+ 
 <script src="script.js"></script>
 
-
 <script>
+    let utterance; // Para armazenar a fala
+let isPlaying = false; // Estado de reprodução
+
+function playAudio(atividadeId) {
+    const texto = document.getElementById(`generatedText_${atividadeId}`).innerText; // Obtém o texto gerado
+    if (!isPlaying) {
+        // Cria uma nova utterance se não estiver em reprodução
+        utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'it-IT'; // Define o idioma para italiano
+
+        // Define os eventos para pausar e interromper
+        utterance.onend = function() {
+            isPlaying = false;
+        };
+
+        // Reproduz o áudio
+        window.speechSynthesis.speak(utterance);
+        isPlaying = true; // Atualiza o estado de reprodução
+    } else {
+        // Se já estiver em reprodução, apenas continua
+        window.speechSynthesis.resume();
+    }
+}
+
+function pauseAudio(atividadeId) {
+    if (isPlaying) {
+        window.speechSynthesis.pause(); // Pausa a fala
+        isPlaying = false; // Atualiza o estado
+    }
+}
+
+function stopAudio(atividadeId) {
+    if (isPlaying) {
+        window.speechSynthesis.cancel(); // Interrompe a fala
+        isPlaying = false; // Atualiza o estado
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    const atividades = <?php echo json_encode($atividadesDados); ?>; // Passa o array completo
+    const totalAtividades = <?php echo $totalAtividades; ?>;
+
+    for (let atividade = 1; atividade <= totalAtividades; atividade++) {
+        const texto = atividades[atividade]?.texto;
+        const palavras = atividades[atividade]?.palavras;
+
+        if (typeof texto !== 'undefined' && typeof palavras !== 'undefined') {
+            setupActivity(atividade, texto, palavras);
+        }
+
+        // Adiciona o event listener para cada botão de enviar texto
+        const enviarTextoBtn = document.getElementById(`enviartexto_${atividade}`);
+        if (enviarTextoBtn) {
+            enviarTextoBtn.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const inputText = document.getElementById(`inputText_${atividade}`).value;
+                const inputWords = document.getElementById(`inputWords_${atividade}`).value;
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'salvartexto.php',
+                    data: {
+                        atividade_id: atividade,
+                        texto: inputText,
+                        palavras: inputWords
+                    },
+                    success: function (response) {
+                        try {
+                            const result = JSON.parse(response);
+                            alert(result.message);
+                            if (result.success) {
+                                setupActivity(atividade, inputText, inputWords);
+                            }
+                        } catch (e) {
+                            alert('Erro ao processar a resposta do servidor.');
+                        }
+                    },
+                    error: function () {
+                        alert('Erro ao salvar os dados. Tente novamente.');
+                    }
+                });
+            });
+        }
+    }
+});
+
+function setupActivity(atividadeId, texto, palavras) {
+    let generatedText = document.getElementById(`generatedText_${atividadeId}`);
+    let optionsContainer = document.getElementById(`options_${atividadeId}`);
+    let exerciseSection = document.getElementById(`exerciseSection_${atividadeId}`);
+
+    if (generatedText && optionsContainer && exerciseSection) {
+        generatedText.innerHTML = texto.replace(/\[([^\]]+)\]/g, '<span class="dropzone" data-answer="$1"></span>');
+        optionsContainer.innerHTML = '';
+
+        palavras.split(',').forEach(word => {
+            let wordOption = document.createElement('div');
+            wordOption.className = 'option';
+            wordOption.setAttribute('draggable', 'true');
+            wordOption.textContent = word.trim();
+            
+            wordOption.addEventListener('dragstart', function(event) {
+                event.dataTransfer.setData('text/plain', wordOption.textContent);
+            });
+
+            optionsContainer.appendChild(wordOption);
+        });
+
+        exerciseSection.classList.remove('d-none');
+
+        const dropzones = document.querySelectorAll(`.dropzone`);
+        dropzones.forEach(dropzone => {
+            dropzone.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                dropzone.classList.add('hover');
+            });
+
+            dropzone.addEventListener('dragleave', function() {
+                dropzone.classList.remove('hover');
+            });
+
+            dropzone.addEventListener('drop', function(event) {
+                event.preventDefault();
+                const droppedWord = event.dataTransfer.getData('text/plain');
+                dropzone.textContent = droppedWord;
+                dropzone.classList.remove('hover');
+
+                if (dropzone.dataset.answer === droppedWord) {
+                    dropzone.classList.add('correct');
+                } else {
+                    dropzone.classList.add('incorrect');
+                }
+            });
+        });
+    } else {
+        console.error(`Elementos não encontrados para a atividade ${atividadeId}`);
+    }
+}
+
+// Funções de áudio e verificação de respostas
+function playAudio(atividadeId) {
+    const texto = document.getElementById(`generatedText_${atividadeId}`).innerText;
+    if (!isPlaying) {
+        utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'it-IT';
+
+        utterance.onend = function() {
+            isPlaying = false;
+        };
+
+        window.speechSynthesis.speak(utterance);
+        isPlaying = true;
+    } else {
+        window.speechSynthesis.resume();
+    }
+}
+
+function pauseAudio(atividadeId) {
+    if (isPlaying) {
+        window.speechSynthesis.pause();
+        isPlaying = false;
+    }
+}
+
+function stopAudio(atividadeId) {
+    if (isPlaying) {
+        window.speechSynthesis.cancel();
+        isPlaying = false;
+    }
+}
+
+function verificarResposta(atividadeId) {
+    let dropzones = document.querySelectorAll(`#exerciseSection_${atividadeId} .dropzone`);
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    dropzones.forEach(dropzone => {
+        let answer = dropzone.getAttribute('data-answer');
+        let userAnswer = dropzone.textContent.trim();
         
-    </script>
+        if (userAnswer === answer) {
+            dropzone.classList.add('correct');
+            dropzone.classList.remove('incorrect');
+            correctCount++;
+        } else {
+            dropzone.classList.add('incorrect');
+            dropzone.classList.remove('correct');
+            incorrectCount++;
+        }
+    });
+
+    let scoreDisplay = document.getElementById(`score_${atividadeId}`);
+    scoreDisplay.textContent = `Corrette: ${correctCount} | Sbagliate: ${incorrectCount}`;
+}
 
 
-    
+</script>
+
+
+
+
 
 
 

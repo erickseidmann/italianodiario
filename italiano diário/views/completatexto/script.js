@@ -1,80 +1,114 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const textForm = document.getElementById('textForm');
-    const optionsContainer = document.getElementById('options');
-    const generatedText = document.getElementById('generatedText');
-    const exerciseSection = document.getElementById('exerciseSection');
-    const result = document.getElementById('result');
-    const verifyBtn = document.getElementById('verifyBtn');
 
-    textForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const inputText = document.getElementById('inputText').value;
-        const inputWords = document.getElementById('inputWords').value.split(',');
+function setupActivity(atividadeId, texto, palavras) {
+    let generatedText = document.getElementById(`generatedText_${atividadeId}`);
+    let optionsContainer = document.getElementById(`options_${atividadeId}`);
+    let exerciseSection = document.getElementById(`exerciseSection_${atividadeId}`);
+    let enviarTextoBtn = document.getElementById(`enviartexto_${atividadeId}`); // Certifique-se de que o ID do botão é único por atividade
 
-        // Gerar o texto com zonas dropzone
-        let textWithDropzones = inputText.replace(/\[([^\]]+)\]/g, '<span class="dropzone" data-answer="$1"></span>');
-        generatedText.innerHTML = textWithDropzones;
-
-        // Exibir palavras como opções
+    if (generatedText && optionsContainer && exerciseSection) {
+        generatedText.innerHTML = texto.replace(/\[([^\]]+)\]/g, '<span class="dropzone" data-answer="$1"></span>');
         optionsContainer.innerHTML = '';
-        inputWords.forEach(word => {
+
+        palavras.split(',').forEach(word => {
             let wordOption = document.createElement('div');
             wordOption.className = 'option';
             wordOption.setAttribute('draggable', 'true');
             wordOption.textContent = word.trim();
+            
+            wordOption.addEventListener('dragstart', function(event) {
+                event.dataTransfer.setData('text/plain', wordOption.textContent);
+            });
+
             optionsContainer.appendChild(wordOption);
         });
 
-        // Tornar visível a seção de exercício
         exerciseSection.classList.remove('d-none');
-
-        // Adicionar eventos de drag-and-drop para as novas opções
-        initializeDragAndDrop();
-    });
-
-    function initializeDragAndDrop() {
-        const options = document.querySelectorAll('.option');
-        const dropzones = document.querySelectorAll('.dropzone');
-
-        options.forEach(option => {
-            option.addEventListener('dragstart', dragStart);
-        });
-
+        
+        const dropzones = document.querySelectorAll(`.dropzone`);
         dropzones.forEach(dropzone => {
-            dropzone.addEventListener('dragover', dragOver);
-            dropzone.addEventListener('drop', drop);
-        });
+            dropzone.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                dropzone.classList.add('hover');
+            });
 
-        function dragStart(e) {
-            e.dataTransfer.setData('text', e.target.textContent);
-        }
+            dropzone.addEventListener('dragleave', function() {
+                dropzone.classList.remove('hover');
+            });
 
-        function dragOver(e) {
-            e.preventDefault();
-        }
+            dropzone.addEventListener('drop', function(event) {
+                event.preventDefault();
+                const droppedWord = event.dataTransfer.getData('text/plain');
+                dropzone.textContent = droppedWord;
+                dropzone.classList.remove('hover');
 
-        function drop(e) {
-            e.preventDefault();
-            const data = e.dataTransfer.getData('text');
-            e.target.textContent = data;
-        }
-
-        verifyBtn.addEventListener('click', () => {
-            let correctCount = 0;
-            let incorrectCount = 0;
-            dropzones.forEach(dropzone => {
-                if (dropzone.textContent.trim() === dropzone.getAttribute('data-answer')) {
+                if (dropzone.dataset.answer === droppedWord) {
                     dropzone.classList.add('correct');
-                    dropzone.classList.remove('incorrect');
-                    correctCount++;
                 } else {
                     dropzone.classList.add('incorrect');
-                    dropzone.classList.remove('correct');
-                    incorrectCount++;
                 }
             });
-            result.innerHTML = `<p>Corretos: ${correctCount}, Errados: ${incorrectCount}</p>`;
-            result.classList.add('mt-3');
         });
+
+        enviarTextoBtn.addEventListener('click', function(event) {
+            event.preventDefault(); 
+
+            const inputText = document.getElementById(`inputText_${atividadeId}`).value;
+            const inputWords = document.getElementById(`inputWords_${atividadeId}`).value;
+
+            $.ajax({
+                type: 'POST',
+                url: 'salvartexto.php',
+                data: {
+                    atividade_id: atividadeId,
+                    texto: inputText,
+                    palavras: inputWords
+                },
+                success: function(response) {
+                    try {
+                        const result = JSON.parse(response);
+                        alert(result.message); 
+                        if (result.success) {
+                            setupActivity(atividadeId, inputText, inputWords); 
+                        }
+                    } catch (e) {
+                        alert('Erro ao processar a resposta do servidor.');
+                    }
+                },
+                error: function() {
+                    alert('Erro ao salvar os dados. Tente novamente.');
+                }
+            });
+        });
+    } else {
+        console.error(`Elementos não encontrados para a atividade ${atividadeId}`);
     }
-});
+}
+function adicionarTextoPalavras(atividadeId) {
+    const inputText = document.getElementById(`inputText_${atividadeId}`).value;
+    const inputWords = document.getElementById(`inputWords_${atividadeId}`).value;
+    
+    $.ajax({
+        type: 'POST',
+        url: 'salvartexto.php',
+        data: {
+            atividade_id: atividadeId,
+            texto: inputText,
+            palavras: inputWords
+        },
+        success: function(response) {
+            try {
+                const result = JSON.parse(response);
+                alert(result.message);
+                if (result.success) {
+                    setupActivity(atividadeId, inputText, inputWords);
+                }
+            } catch (e) {
+                alert('Erro ao processar a resposta do servidor.');
+            }
+        },
+        error: function() {
+            alert('Erro ao salvar os dados. Tente novamente.');
+        }
+    });
+}
+
