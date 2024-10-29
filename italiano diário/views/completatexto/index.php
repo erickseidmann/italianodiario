@@ -131,6 +131,8 @@ for ($i = 1; $i <= $totalAtividades; $i++) {
                                                         </div>
                                                         <p>clique no botão duas vezes primeiro para adicionar e revisar e o segundo para salvar</p>
                                                         <button id="enviartexto_<?php echo $atividade; ?>" class="btn btn-primary">Adicionar Texto e Palavras</button>
+                                                        <button id="excluirtexto_<?php echo $atividade; ?>" class="btn btn-danger" onclick="confirmarExcluirTexto(<?php echo $atividade; ?>)">Excluir Texto</button>
+
                                                     </form>
                                                 <?php endif; ?>
 
@@ -218,42 +220,77 @@ for ($i = 1; $i <= $totalAtividades; $i++) {
 <script src="script.js"></script>
 
 <script>
-    let utterance; // Para armazenar a fala
+let utterance; // Para armazenar a fala
 let isPlaying = false; // Estado de reprodução
+let isPaused = false; // Estado de pausa
 
 function playAudio(atividadeId) {
     const texto = document.getElementById(`generatedText_${atividadeId}`).innerText; // Obtém o texto gerado
-    if (!isPlaying) {
-        // Cria uma nova utterance se não estiver em reprodução
-        utterance = new SpeechSynthesisUtterance(texto);
-        utterance.lang = 'it-IT'; // Define o idioma para italiano
-
-        // Define os eventos para pausar e interromper
-        utterance.onend = function() {
-            isPlaying = false;
-        };
-
-        // Reproduz o áudio
-        window.speechSynthesis.speak(utterance);
-        isPlaying = true; // Atualiza o estado de reprodução
-    } else {
-        // Se já estiver em reprodução, apenas continua
-        window.speechSynthesis.resume();
+    if (!isPlaying || isPaused) {
+        // Cria uma nova utterance se não estiver em reprodução ou retoma se estiver em pausa
+        if (!utterance || isPaused) {
+            utterance = new SpeechSynthesisUtterance(texto);
+            utterance.lang = 'it-IT'; // Define o idioma para italiano
+            
+            // Evento ao terminar a reprodução
+            utterance.onend = function() {
+                isPlaying = false;
+                isPaused = false;
+            };
+            window.speechSynthesis.speak(utterance);
+        } else {
+            window.speechSynthesis.resume(); // Retoma a reprodução se estava pausado
+        }
+        
+        isPlaying = true; 
+        isPaused = false;
     }
 }
 
 function pauseAudio(atividadeId) {
-    if (isPlaying) {
+    if (isPlaying && !isPaused) {
         window.speechSynthesis.pause(); // Pausa a fala
-        isPlaying = false; // Atualiza o estado
+        isPaused = true; // Atualiza o estado para pausa
     }
 }
 
 function stopAudio(atividadeId) {
     if (isPlaying) {
         window.speechSynthesis.cancel(); // Interrompe a fala
-        isPlaying = false; // Atualiza o estado
+        isPlaying = false; // Reseta o estado de reprodução
+        isPaused = false; // Reseta o estado de pausa
     }
+}
+
+function confirmarExcluirTexto(atividadeId) {
+    const confirmar = confirm("Tem certeza que deseja excluir este texto?");
+    if (confirmar) {
+        excluirTexto(atividadeId);
+    }
+}
+
+function excluirTexto(atividadeId) {
+    $.ajax({
+        type: 'POST',
+        url: 'excluirtexto.php', // Arquivo PHP que processará a exclusão do texto
+        data: { atividade_id: atividadeId },
+        success: function (response) {
+            try {
+                const result = JSON.parse(response);
+                alert(result.message);
+                if (result.success) {
+                    document.getElementById(`generatedText_${atividadeId}`).innerHTML = ''; // Remove o texto do display
+                    document.getElementById(`inputText_${atividadeId}`).value = ''; // Limpa o campo de texto
+                    document.getElementById(`inputWords_${atividadeId}`).value = ''; // Limpa o campo de palavras
+                }
+            } catch (e) {
+                alert('Erro ao processar a resposta do servidor.');
+            }
+        },
+        error: function () {
+            alert('Erro ao excluir o texto. Tente novamente.');
+        }
+    });
 }
 document.addEventListener("DOMContentLoaded", function () {
     const atividades = <?php echo json_encode($atividadesDados); ?>; // Passa o array completo
@@ -389,6 +426,8 @@ function stopAudio(atividadeId) {
     }
 }
 
+
+
 function verificarResposta(atividadeId) {
     let dropzones = document.querySelectorAll(`#exerciseSection_${atividadeId} .dropzone`);
     let correctCount = 0;
@@ -397,7 +436,7 @@ function verificarResposta(atividadeId) {
     dropzones.forEach(dropzone => {
         let answer = dropzone.getAttribute('data-answer');
         let userAnswer = dropzone.textContent.trim();
-        
+
         if (userAnswer === answer) {
             dropzone.classList.add('correct');
             dropzone.classList.remove('incorrect');
@@ -411,6 +450,33 @@ function verificarResposta(atividadeId) {
 
     let scoreDisplay = document.getElementById(`score_${atividadeId}`);
     scoreDisplay.textContent = `Corrette: ${correctCount} | Sbagliate: ${incorrectCount}`;
+
+    // Envio da pontuação para o backend
+    $.ajax({
+        type: 'POST',
+        url: 'salvarpontuacao.php', // Endereço do arquivo que processará o salvamento da pontuação
+        data: {
+            atividade_id: atividadeId,
+            acertos: correctCount, // Altera para 'acertos'
+            erros: incorrectCount,  // Altera para 'erros'
+            pontuacao: correctCount // Aqui pode ser definida uma lógica de cálculo se necessário
+        },
+        success: function (response) {
+            try {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    alert("Pontuação salva com sucesso!");
+                } else {
+                    alert("Falha ao salvar a pontuação: " + result.message);
+                }
+            } catch (e) {
+                alert('Erro ao processar a resposta do servidor.');
+            }
+        },
+        error: function () {
+            alert('Erro ao salvar a pontuação. Tente novamente.');
+        }
+    });
 }
 
 
