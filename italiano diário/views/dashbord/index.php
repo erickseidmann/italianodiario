@@ -9,87 +9,78 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 include '../../config/config.php';
 
 // Obter o nome do usuário logado
-$user_name = $_SESSION['name'];
+if (isset($_SESSION['name'])) {
+    $user_name = $_SESSION['name'] === 'ADM@adm.com' ? 'admin' : $_SESSION['name'];
+} else {
+    $user_name = "ADM"; // Define "Usuário" como padrão caso 'name' não esteja definido
+}
+
+// Verificar se o usuário é ADM para ajustar o filtro das consultas
+$is_admin = ($user_name === 'ADM');
 
 // Consultar as pontuações do banco de dados filtradas pelo usuário logado
 $query_scores = "SELECT user_name, activity_number, correct_count, incorrect_count, score, attempt_date 
-                 FROM activity_scores 
-                 WHERE user_name = ? 
+                 FROM activity_scores " . ($is_admin ? "" : "WHERE user_name = ?") . " 
                  ORDER BY attempt_date DESC";
 
 // Preparar a consulta
 $stmt_scores = $conn->prepare($query_scores);
-$stmt_scores->bind_param("s", $user_name);
+if (!$is_admin) {
+    $stmt_scores->bind_param("s", $user_name);
+}
 $stmt_scores->execute();
 $result_scores = $stmt_scores->get_result();
 
-if ($result_scores === false) {
-    die("Erro na consulta de scores: " . $conn->error);
-}
-
 // Consultar resultados das atividades filtradas pelo usuário logado
 $query_results = "SELECT user_name, atividade_id, corretas, erradas, pontuacao, data 
-                  FROM resultados_atividades 
-                  WHERE user_name = ? 
+                  FROM resultados_atividades " . ($is_admin ? "" : "WHERE user_name = ?") . " 
                   ORDER BY data DESC";
 
-// Preparar a consulta
 $stmt_results = $conn->prepare($query_results);
-$stmt_results->bind_param("s", $user_name);
+if (!$is_admin) {
+    $stmt_results->bind_param("s", $user_name);
+}
 $stmt_results->execute();
 $result_results = $stmt_results->get_result();
-
-if ($result_results === false) {
-    die("Erro na consulta de resultados: " . $conn->error);
-}
 
 
 // Consultar resultados das atividades "Vero o Falso" filtradas pelo usuário logado
 $query_verofalso = "SELECT usuario, atividade, acertos, erros, pontuacao, data 
-                    FROM pontuacaoVeroFalso 
-                    WHERE usuario = ? 
+                    FROM pontuacaoVeroFalso " . ($is_admin ? "" : "WHERE usuario = ?") . " 
                     ORDER BY data DESC";
 
-// Preparar a consulta
 $stmt_verofalso = $conn->prepare($query_verofalso);
-$stmt_verofalso->bind_param("s", $user_name);
+if (!$is_admin) {
+    $stmt_verofalso->bind_param("s", $user_name);
+}
 $stmt_verofalso->execute();
 $result_verofalso = $stmt_verofalso->get_result();
 
-if ($result_verofalso === false) {
-    die("Erro na consulta de resultados 'Vero o Falso': " . $conn->error);
-}
 
-$query_completa_le_frasi = "SELECT  usuario_id, atividade_id, acertos, erros, pontuacao, data 
-                             FROM pontucaocompletafrase
-                             WHERE usuario_id = ? 
+// Consultar resultados das atividades "Completa le Frasi"
+$query_completa_le_frasi = "SELECT usuario_id, atividade_id, acertos, erros, pontuacao, data 
+                             FROM pontucaocompletafrase " . ($is_admin ? "" : "WHERE usuario_id = ?") . " 
                              ORDER BY data DESC";
 
-// Preparar a consulta
 $stmt_completa_le_frasi = $conn->prepare($query_completa_le_frasi);
-$stmt_completa_le_frasi->bind_param("s", $user_name);
+if (!$is_admin) {
+    $stmt_completa_le_frasi->bind_param("s", $user_name);
+}
 $stmt_completa_le_frasi->execute();
 $result_completa_le_frasi = $stmt_completa_le_frasi->get_result();
 
-if ($result_completa_le_frasi === false) {
-    die("Erro na consulta de resultados 'Completa le frasi': " . $conn->error);
-}
-
 // Substitua `usuario_id` pelo nome da coluna correta, se necessário
+// Consultar resultados das atividades "Completa Texto"
 $query_completa_texto = "SELECT usuario, atividade_id, acertos, erros, pontuacao, data 
-                          FROM pontucaocompletatexto 
-                          WHERE usuario = ? 
+                          FROM pontucaocompletatexto " . ($is_admin ? "" : "WHERE usuario = ?") . " 
                           ORDER BY data DESC";
 
-// Preparar a consulta
 $stmt_completa_texto = $conn->prepare($query_completa_texto);
-$stmt_completa_texto->bind_param("s", $user_name); // `usuario` deve ser um valor adequado para filtrar
+if (!$is_admin) {
+    $stmt_completa_texto->bind_param("s", $user_name);
+}
 $stmt_completa_texto->execute();
 $result_completa_texto = $stmt_completa_texto->get_result();
-
-if ($result_completa_texto === false) {
-    die("Erro na consulta de resultados 'Completa texto': " . $conn->error);
-}
 
 // Fechar a conexão ao banco de dados
 $conn->close();
@@ -105,7 +96,11 @@ $conn->close();
 include '../comun/headeralunos.php';
 ?>
 
-  
+  <style>
+    .dataTables_filter input {
+    margin-bottom: 10px; /* Ajuste esse valor conforme necessário */
+}
+  </style>
   
   
 </head>
@@ -121,7 +116,9 @@ include '../comun/headeralunos.php';
             <div class="col-12 col-md-12 col-lg-10 m-auto">
                 <div class="content">
                     <div class="mbr-section-head align-left mb-5">
-                        <h4 class="mbr-section-subtitle mb-2 mbr-fonts-style display-5"><strong><?php echo "Bem-vindo, " . $_SESSION['name'] . "!"; ?></strong></h4>
+                    <h4 class="mbr-section-subtitle mb-2 mbr-fonts-style display-5"><strong>
+    <?php echo "Bem-vindo, " . (isset($_SESSION['name']) ? $_SESSION['name'] : "ADM") . "!"; ?>
+</strong></h4>
                         
                     </div>
                     <div id="bootstrap-accordion_29" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">
@@ -355,7 +352,7 @@ include '../comun/headeralunos.php';
     
     <div class="container">
         <div class="mbr-section-head">
-            <h4 class="mbr-section-title mbr-fonts-style align-left mb-0 display-1"><strong>Esercizi</strong></h4>
+            <h4 class="mbr-section-title mbr-fonts-style align-left mb-0 display-1"><strong>È ora di esercitarsi</strong></h4>
             
         </div>
         <div class="row mt-4">
@@ -458,6 +455,32 @@ include '../comun/headeralunos.php';
   <script src="assets/dropdown/js/navbar-dropdown.js"></script>
   <script src="assets/mbr-switch-arrow/mbr-switch-arrow.js"></script>
   <script src="assets/theme/js/script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script>
+$(document).ready(function() {
+    $('.table').DataTable({
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registros por página<br>",
+            "zeroRecords": "Nada encontrado",
+            "info": "Exibindo página _PAGE_ de _PAGES_",
+            "infoEmpty": "Nenhum registro disponível",
+            "infoFiltered": "(filtrado de _MAX_ registros no total)",
+            "search": "<br>Pesquisar: ",
+            "paginate": {
+                "first": "Primeira",
+                "last": "Última",
+                "next": ">>",
+                "previous": "<<"
+            }
+        },
+        "initComplete": function() {
+            // Removido o <br> para o controle via CSS
+        }
+    });
+});
+</script>
   
   
   
